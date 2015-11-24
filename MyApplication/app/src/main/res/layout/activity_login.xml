@@ -17,7 +17,7 @@
 
         <TextView
             style="@style/CustomButton"
-            android:id="@+id/activity_login_tvLogin"
+            android:id="@+id/activity_login_btnLogin"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:text= "@string/login_label"
@@ -25,7 +25,7 @@
             android:layout_centerHorizontal="true" />
         <TextView
             style="@style/CustomButton"
-            android:id="@+id/activity_login_tvRegister"
+            android:id="@+id/activity_login_btnRegister"
             android:layout_width= "match_parent"
             android:layout_height="match_parent"
             android:text="@string/register_label"
@@ -33,14 +33,29 @@
             android:layout_centerHorizontal="true" />
     </LinearLayout>
 
-    <TextView
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        style="@style/CustomTextBox"
-        android:text="Medium Text"
-        android:id="@+id/activity_login_tvLoginValue"
-        android:layout_above="@+id/linearLayout"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="91dp" />
+        android:orientation="vertical"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true">
+
+
+        <TextView
+            android:layout_height="match_parent"
+            style="@style/CustomTextBox"
+            android:text="Login"
+            android:id="@+id/activity_login_tvLogin"
+            android:layout_above="@+id/linearLayout"
+            android:layout_centerHorizontal="true" />
+
+        <TextView
+            android:layout_height="match_parent"
+            style="@style/CustomTextBox"
+            android:text="Hasło"
+            android:id="@+id/activity_login_tvPassword"
+            android:layout_above="@+id/linearLayout"
+            android:layout_centerHorizontal="true" />
+    </LinearLayout>
 
 </RelativeLayout>

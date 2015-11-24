@@ -2,6 +2,8 @@
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
-    <dimen name="custom_btn_horizontal">1000dp</dimen>
-    <dimen name="custom_btn_vertical">240dp</dimen>
+    <dimen name="custom_btn_horizontal">100dip</dimen>
+    <dimen name="custom_btn_vertical">40dip</dimen>
+    <dimen name="custom_tv_vertical">36dip</dimen>
+    <dimen name="custom_tv_horizontal">160dip</dimen>
 </resources>
