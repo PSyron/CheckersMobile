@@ -9,6 +9,14 @@ import pl.checkersmobile.utils.Logger;
  */
 public class CheckerApplication extends Application {
     public static final String TAG = CheckerApplication.class.getName();
+    private static CheckerApplication sInstance;
+
+    public static synchronized CheckerApplication getInstance() {
+        if (sInstance == null) {
+            sInstance = new CheckerApplication();
+        }
+        return sInstance;
+    }
 
     @Override
     public void onLowMemory() {

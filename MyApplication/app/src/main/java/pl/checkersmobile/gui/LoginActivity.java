@@ -2,14 +2,13 @@ package pl.checkersmobile.gui;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.widget.TextView;
-
-import org.w3c.dom.Text;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import pl.checkersmobile.R;
+import pl.checkersmobile.communication.HttpRequestHelper;
 
 public class LoginActivity extends Activity {
 
@@ -28,5 +27,11 @@ public class LoginActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
+    }
+
+    //Not tested
+    @OnClick(R.id.activity_login_btnLogin)
+    private void login() {
+        HttpRequestHelper.getInstance(this).login(tvLogin.getText().toString(), tvPassword.getText().toString());
     }
 }

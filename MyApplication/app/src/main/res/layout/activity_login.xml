@@ -3,59 +3,59 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".LoginActivity"
-    android:background="@drawable/main_bng">
+    android:background="@drawable/main_bng"
+    tools:context=".LoginActivity">
 
     <LinearLayout
+        android:id="@+id/linearLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="48dp"
-        android:id="@+id/linearLayout">
+        android:orientation="vertical">
 
         <TextView
-            style="@style/CustomButton"
             android:id="@+id/activity_login_btnLogin"
+            style="@style/CustomButton"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text= "@string/login_label"
             android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true" />
+            android:layout_centerHorizontal="true"
+            android:text="@string/login_label" />
+
         <TextView
-            style="@style/CustomButton"
             android:id="@+id/activity_login_btnRegister"
-            android:layout_width= "match_parent"
+            style="@style/CustomButton"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="@string/register_label"
             android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true" />
+            android:layout_centerHorizontal="true"
+            android:text="@string/register_label" />
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
+        android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true">
-
+        android:orientation="vertical">
 
         <TextView
-            android:layout_height="match_parent"
-            style="@style/CustomTextBox"
-            android:text="Login"
             android:id="@+id/activity_login_tvLogin"
+            style="@style/CustomTextBox"
+            android:layout_height="match_parent"
             android:layout_above="@+id/linearLayout"
-            android:layout_centerHorizontal="true" />
+            android:layout_centerHorizontal="true"
+            android:text="Login" />
 
         <TextView
-            android:layout_height="match_parent"
-            style="@style/CustomTextBox"
-            android:text="Hasło"
             android:id="@+id/activity_login_tvPassword"
+            style="@style/CustomTextBox"
+            android:layout_height="match_parent"
             android:layout_above="@+id/linearLayout"
-            android:layout_centerHorizontal="true" />
+            android:layout_centerHorizontal="true"
+            android:text="Hasło" />
     </LinearLayout>
 
 </RelativeLayout>
