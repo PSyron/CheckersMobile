@@ -1,6 +1,7 @@
 package pl.checkersmobile.gui;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TextView;
 
@@ -31,7 +32,14 @@ public class LoginActivity extends Activity {
 
     //Not tested
     @OnClick(R.id.activity_login_btnLogin)
-    private void login() {
+    protected void login() {
         HttpRequestHelper.getInstance(this).login(tvLogin.getText().toString(), tvPassword.getText().toString());
+    }
+
+    @OnClick(R.id.activity_login_btnRegister)
+    protected   void register()
+    {
+        Intent myIntent = new Intent(this, RegistrationActivity.class);
+        this.startActivity(myIntent);
     }
 }

@@ -10,57 +10,59 @@
         android:id="@+id/linearLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
+        android:orientation="vertical"
         android:layout_below="@+id/linearLayout2"
-        android:layout_marginTop="24dp"
-        android:orientation="vertical">
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="24dp">
 
         <TextView
-            android:id="@+id/activity_login_btnLogin"
-            style="@style/CustomButton"
-            android:text="@string/login_label" />
-
-        <TextView
-            android:id="@+id/activity_login_btnRegister"
+            android:id="@+id/activity_registration_btnRegister"
             style="@style/CustomButton"
             android:text="@string/register_label" />
+
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
         android:orientation="vertical"
+        android:id="@+id/linearLayout2"
         android:layout_below="@+id/linearLayout3"
         android:layout_marginTop="24dp"
-        android:id="@+id/linearLayout2">
+        android:layout_centerHorizontal="true">
 
         <TextView
-            android:id="@+id/activity_login_tvLogin"
+            android:id="@+id/activity_registration_tvLogin"
             style="@style/CustomTextBox"
             android:layout_above="@+id/linearLayout"
             android:layout_centerHorizontal="true"
             android:text="Login" />
 
         <TextView
-            android:id="@+id/activity_login_tvPassword"
+            android:id="@+id/activity_registration_tvPassword"
             style="@style/CustomTextBox"
             android:layout_above="@+id/linearLayout"
             android:layout_centerHorizontal="true"
             android:text="Hasło" />
+
+        <TextView
+            android:id="@+id/activity_registration_tvPasswordSnd"
+            style="@style/CustomTextBox"
+            android:layout_above="@+id/linearLayout"
+            android:layout_centerHorizontal="true"
+            android:text="Hasło" />
+
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/linearLayout3"
         android:orientation="vertical"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginTop="80dp"
-        android:layout_centerHorizontal="true">
+        android:layout_centerHorizontal="true"
+        android:id="@+id/linearLayout3">
 
         <TextView
             style="@style/LogoTextLarge"

@@ -2,5 +2,6 @@
     <string name="app_name">Checkers Mobile</string>
     <string name="login_label">Zaloguj się</string>
     <string name="register_label">Zarejestruj się</string>
+    <string name="title_activity_menu">MenuActivity</string>
 
 </resources>
