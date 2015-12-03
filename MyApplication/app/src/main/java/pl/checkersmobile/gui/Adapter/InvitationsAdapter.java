@@ -1,14 +1,12 @@
 package pl.checkersmobile.gui.Adapter;
 
-import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
-import butterknife.Bind;
+
 import pl.checkersmobile.R;
 
 /**
@@ -16,6 +14,7 @@ import pl.checkersmobile.R;
  */
 public class InvitationsAdapter extends BaseAdapter {
 
+/*
     @Bind(R.id.item_invitations_ibAccept)
     ImageView ibAccept;
     @Bind(R.id.item_invitations_ibDecline)
@@ -25,9 +24,10 @@ public class InvitationsAdapter extends BaseAdapter {
     @Bind(R.id.item_invitations_tvTime)
     TextView tvTime;
 
+*/
 
-    Context mContext;
     private static LayoutInflater inflater = null;
+    Context mContext;
     //TODO sprecyzowanie modelu
     private String[] mModel = null;
 
@@ -35,11 +35,6 @@ public class InvitationsAdapter extends BaseAdapter {
         mContext = ctx;
         inflater  = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mModel = inModel;
-    }
-
-    public class Holder {
-        TextView name;
-        TextView time;
     }
 
     @Override
@@ -66,12 +61,17 @@ public class InvitationsAdapter extends BaseAdapter {
         View rowView;
         rowView = inflater.inflate(R.layout.item_invitations, null);
 
-        holder.name = tvName;
-        holder.time = tvTime;
+        holder.name = (TextView) rowView.findViewById(R.id.item_invitations_tvName);
+        holder.time = (TextView) rowView.findViewById(R.id.item_invitations_tvTime);
 
         holder.name.setText(mModel[position]);
         holder.time.setText(mModel[position]);
 
         return rowView;
+    }
+
+    public class Holder {
+        TextView name;
+        TextView time;
     }
 }
