@@ -1,11 +1,25 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="@android:style/Theme.NoTitleBar.Fullscreen">
+    <style name="AppTheme" parent="@style/Theme.AppCompat.Light">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+    </style>
+
+    <style name="AppBarStyle" parent="@style/Theme.AppCompat.Light">
+        <!-- Customize your theme here. -->
+        <item name="android:windowBackground">@drawable/game_bng</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="colorPrimary">@color/buttonText</item>
+        <item name="colorPrimaryDark">@color/buttonBng</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:textColorPrimary">@android:color/white</item>
     </style>
 
     <style name="CustomButton" parent="@android:style/Widget.TextView">
@@ -23,7 +37,7 @@
         <item name="android:layout_margin">16dp</item>
     </style>
 
-    <style name="CustomTextBox" parent="@android:style/Widget.TextView">
+    <style name="CustomEditText" parent="@android:style/Widget.EditText">
         <item name="android:textColor">@android:color/black</item>
         <item name="android:textSize">16sp</item>
         <item name="android:textStyle">normal</item>
@@ -39,7 +53,6 @@
         <item name="android:textColor">@android:color/black</item>
         <item name="android:textSize">64sp</item>
         <item name="android:textStyle">italic|bold</item>
-        <item name="android:typeface">serif</item>
         <item name="android:background">@android:color/transparent</item>
         <item name="android:gravity">center</item>
     </style>
@@ -47,6 +60,20 @@
     <style name="LogoTextLarge.Small">
         <item name="android:textColor">@android:color/black</item>
         <item name="android:textSize">42sp</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
+    <style name="ItemListText" parent="@android:style/Widget.TextView">
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textSize">32sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:gravity">left</item>
+        <item name="android:padding">4dp</item>
+    </style>
+
+    <style name="ItemListText.Small" >
+        <item name="android:textSize">24sp</item>
         <item name="android:textStyle">normal</item>
     </style>
 

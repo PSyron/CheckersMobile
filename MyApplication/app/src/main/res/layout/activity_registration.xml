@@ -31,23 +31,23 @@
         android:layout_marginTop="24dp"
         android:layout_centerHorizontal="true">
 
-        <TextView
+        <EditText
             android:id="@+id/activity_registration_tvLogin"
-            style="@style/CustomTextBox"
+            style="@style/CustomEditText"
             android:layout_above="@+id/linearLayout"
             android:layout_centerHorizontal="true"
             android:text="Login" />
 
-        <TextView
+        <EditText
             android:id="@+id/activity_registration_tvPassword"
-            style="@style/CustomTextBox"
+            style="@style/CustomEditText"
             android:layout_above="@+id/linearLayout"
             android:layout_centerHorizontal="true"
             android:text="Hasło" />
 
-        <TextView
+        <EditText
             android:id="@+id/activity_registration_tvPasswordSnd"
-            style="@style/CustomTextBox"
+            style="@style/CustomEditText"
             android:layout_above="@+id/linearLayout"
             android:layout_centerHorizontal="true"
             android:text="Hasło" />

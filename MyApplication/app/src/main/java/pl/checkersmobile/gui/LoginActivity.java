@@ -33,11 +33,15 @@ public class LoginActivity extends Activity {
     //Not tested
     @OnClick(R.id.activity_login_btnLogin)
     protected void login() {
+
+        //TODO
         HttpRequestHelper.getInstance(this).login(tvLogin.getText().toString(), tvPassword.getText().toString());
+        Intent myIntent = new Intent(this, MenuActivity.class);
+        this.startActivity(myIntent);
     }
 
     @OnClick(R.id.activity_login_btnRegister)
-    protected   void register()
+    protected void register()
     {
         Intent myIntent = new Intent(this, RegistrationActivity.class);
         this.startActivity(myIntent);

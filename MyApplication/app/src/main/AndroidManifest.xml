@@ -6,19 +6,28 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:screenOrientation="portrait"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".gui.LoginActivity">
+        <activity
+            android:name=".gui.LoginActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".gui.RegistrationActivity" />
-        <activity android:name=".gui.MenuActivity" />
-
+        <activity
+            android:name=".gui.RegistrationActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".gui.MenuActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".gui.InvitationsActivity"
+            android:screenOrientation="portrait"
+            android:label="@string/title_activity_invitations" />
+        <activity android:name=".gui.BaseAppBarActivity" />
     </application>
 
 </manifest>

@@ -21,9 +21,9 @@
             android:text="Gra offline" />
 
         <TextView
-            android:id="@+id/activity_menu_tnLobby"
+            android:id="@+id/activity_menu_btnInvitations"
             style="@style/CustomButton"
-            android:text="Poczekalnia" />
+            android:text="Zaproszenia" />
 
         <TextView
             android:id="@+id/activity_menu_btnSettings"

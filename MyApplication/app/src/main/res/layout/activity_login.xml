@@ -37,16 +37,16 @@
         android:layout_marginTop="24dp"
         android:id="@+id/linearLayout2">
 
-        <TextView
+        <EditText
             android:id="@+id/activity_login_tvLogin"
-            style="@style/CustomTextBox"
+            style="@style/CustomEditText"
             android:layout_above="@+id/linearLayout"
             android:layout_centerHorizontal="true"
             android:text="Login" />
 
-        <TextView
+        <EditText
             android:id="@+id/activity_login_tvPassword"
-            style="@style/CustomTextBox"
+            style="@style/CustomEditText"
             android:layout_above="@+id/linearLayout"
             android:layout_centerHorizontal="true"
             android:text="Hasło" />
