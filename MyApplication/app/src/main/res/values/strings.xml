@@ -5,5 +5,6 @@
     <string name="title_activity_menu">MenuActivity</string>
     <string name="title_activity_invitations">InvitationsActivity</string>
     <string name="title_activity_base">BaseActivity</string>
+    <string name="title_activity_game_table">GameTableActivity</string>
 
 </resources>

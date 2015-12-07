@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="Encoding">
+    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable/bng_dark.png" charset="windows-1250" />
+    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable/bng_light.png" charset="windows-1250" />
+    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable/checker_black.png" charset="windows-1250" />
+    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable/piece_white.png" charset="windows-1250" />
     <file url="PROJECT" charset="UTF-8" />
   </component>
 </project>

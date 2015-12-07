@@ -33,6 +33,12 @@ public class MenuActivity extends Activity {
         Intent myIntent = new Intent(this, InvitationsActivity.class);
         this.startActivity(myIntent);
     }
+    @OnClick(R.id.activity_menu_btnOffline)
+    protected void game()
+    {
+        Intent myIntent = new Intent(this, GameTableActivity.class);
+        this.startActivity(myIntent);
+    }
 
 
 

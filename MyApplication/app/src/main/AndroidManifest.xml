@@ -19,15 +19,19 @@
         </activity>
         <activity
             android:name=".gui.RegistrationActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".gui.MenuActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".gui.InvitationsActivity"
-            android:screenOrientation="portrait"
-            android:label="@string/title_activity_invitations" />
+            android:label="@string/title_activity_invitations"
+            android:screenOrientation="portrait" />
         <activity android:name=".gui.BaseAppBarActivity" />
+        <activity
+            android:name=".gui.GameTableActivity"
+            android:screenOrientation="portrait"
+            android:label="@string/title_activity_game_table"></activity>
     </application>
 
 </manifest>
