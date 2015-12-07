@@ -36,21 +36,21 @@
             style="@style/CustomEditText"
             android:layout_above="@+id/linearLayout"
             android:layout_centerHorizontal="true"
-            android:text="Login" />
+            android:hint="Login" />
 
         <EditText
             android:id="@+id/activity_registration_tvPassword"
             style="@style/CustomEditText"
             android:layout_above="@+id/linearLayout"
             android:layout_centerHorizontal="true"
-            android:text="Hasło" />
+            android:hint="Hasło" />
 
         <EditText
             android:id="@+id/activity_registration_tvPasswordSnd"
             style="@style/CustomEditText"
             android:layout_above="@+id/linearLayout"
             android:layout_centerHorizontal="true"
-            android:text="Hasło" />
+            android:hint="Hasło" />
 
     </LinearLayout>
 

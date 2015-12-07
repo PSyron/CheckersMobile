@@ -11,6 +11,7 @@ import com.android.volley.toolbox.Volley;
 
 import org.json.JSONObject;
 
+import de.greenrobot.event.EventBus;
 import pl.checkersmobile.Constants;
 import pl.checkersmobile.utils.Logger;
 import pl.checkersmobile.utils.Utils;
@@ -101,14 +102,13 @@ public class HttpRequestHelper {
 
                     @Override
                     public void onResponse(JSONObject response) {
-                        //TODO Prefs save Login
-                        Logger.logD(TAG, response.toString());
+                        EventBus.getDefault().post(new BaseEvent(ResponseStatus.SUCCESS));
                     }
                 }, new Response.ErrorListener() {
 
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Logger.logE(TAG, error.getMessage());
+                        EventBus.getDefault().post(new BaseEvent(ResponseStatus.FAILURE));
                     }
                 });
         addToRequestQueue(jsObjRequest);
@@ -122,14 +122,13 @@ public class HttpRequestHelper {
 
                     @Override
                     public void onResponse(JSONObject response) {
-                        //TODO Prefs save Login
-                        Logger.logD(TAG, response.toString());
+                        EventBus.getDefault().post(new BaseEvent(ResponseStatus.SUCCESS));
                     }
                 }, new Response.ErrorListener() {
 
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Logger.logE(TAG, error.getMessage());
+                        EventBus.getDefault().post(new BaseEvent(ResponseStatus.FAILURE));
                     }
                 });
         addToRequestQueue(jsObjRequest);

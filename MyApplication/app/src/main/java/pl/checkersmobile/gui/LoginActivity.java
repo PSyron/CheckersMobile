@@ -1,17 +1,22 @@
 package pl.checkersmobile.gui;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import de.greenrobot.event.EventBus;
 import pl.checkersmobile.R;
+import pl.checkersmobile.communication.BaseEvent;
 import pl.checkersmobile.communication.HttpRequestHelper;
+import pl.checkersmobile.communication.ResponseStatus;
+import pl.checkersmobile.utils.Utils;
 
-public class LoginActivity extends Activity {
+public class LoginActivity extends FragmentActivity {
 
     @Bind(R.id.activity_login_btnLogin)
     TextView btnLogin;
@@ -28,16 +33,20 @@ public class LoginActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 
     //Not tested
     @OnClick(R.id.activity_login_btnLogin)
     protected void login() {
-
-        //TODO
         HttpRequestHelper.getInstance(this).login(tvLogin.getText().toString(), tvPassword.getText().toString());
-        Intent myIntent = new Intent(this, MenuActivity.class);
-        this.startActivity(myIntent);
+        Utils.showProgressDialog(getSupportFragmentManager(), "Logowanie");
     }
 
     @OnClick(R.id.activity_login_btnRegister)
@@ -45,5 +54,16 @@ public class LoginActivity extends Activity {
     {
         Intent myIntent = new Intent(this, RegistrationActivity.class);
         this.startActivity(myIntent);
+    }
+
+    public void onEvent(BaseEvent event) {
+        Utils.hideProgressDialog(getSupportFragmentManager());
+        if(event.getStatus() == ResponseStatus.SUCCESS){
+            Intent myIntent = new Intent(this, MenuActivity.class);
+            this.startActivity(myIntent);
+            finish();
+        }else{
+            Toast.makeText(this, "Login failure", Toast.LENGTH_LONG).show();
+        }
     }
 }

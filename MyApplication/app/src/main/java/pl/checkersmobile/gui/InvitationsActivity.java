@@ -18,7 +18,7 @@ public class InvitationsActivity extends BaseAppBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_invitations);
         ButterKnife.bind(this);
-        getSupportActionBar().setTitle("Zaproszenia"); //TODO Tomek , wyjebac do stringa w wolnejcwli
+        getSupportActionBar().setTitle(R.string.invitation);
         invitations();
     }
 

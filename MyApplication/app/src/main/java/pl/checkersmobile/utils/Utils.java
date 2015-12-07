@@ -1,5 +1,7 @@
 package pl.checkersmobile.utils;
 
+import android.support.v4.app.FragmentManager;
+
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -36,5 +38,20 @@ public class Utils {
         }
         byte[] sha1hash = md.digest();
         return convertToHex(sha1hash);
+    }
+
+    public static void showProgressDialog(FragmentManager suportFragmentMenager, String title) {
+        ProgressDialogFragment progressDialogFragment =
+                ProgressDialogFragment.newInstance(title);
+        progressDialogFragment.setCancelable(true);
+        progressDialogFragment.show(suportFragmentMenager, ProgressDialogFragment.Dialog);
+    }
+
+    public static void hideProgressDialog(FragmentManager suportFragmentMenager) {
+        ProgressDialogFragment progressDialogFragment =
+                (ProgressDialogFragment) suportFragmentMenager.findFragmentByTag(ProgressDialogFragment.Dialog);
+        if (progressDialogFragment != null && progressDialogFragment.isAdded()) {
+            progressDialogFragment.dismiss();
+        }
     }
 }
