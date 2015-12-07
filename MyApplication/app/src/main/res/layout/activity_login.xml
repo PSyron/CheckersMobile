@@ -42,14 +42,18 @@
             style="@style/CustomEditText"
             android:layout_above="@+id/linearLayout"
             android:layout_centerHorizontal="true"
-            android:text="Login" />
+
+            android:maxLines="1"
+            android:hint="Login" />
 
         <EditText
             android:id="@+id/activity_login_tvPassword"
             style="@style/CustomEditText"
             android:layout_above="@+id/linearLayout"
+
+            android:maxLines="1"
             android:layout_centerHorizontal="true"
-            android:text="Hasło" />
+            android:hint="Hasło" />
     </LinearLayout>
 
     <LinearLayout

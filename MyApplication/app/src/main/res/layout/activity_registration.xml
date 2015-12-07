@@ -36,6 +36,7 @@
             style="@style/CustomEditText"
             android:layout_above="@+id/linearLayout"
             android:layout_centerHorizontal="true"
+            android:maxLines="1"
             android:hint="Login" />
 
         <EditText
@@ -43,12 +44,14 @@
             style="@style/CustomEditText"
             android:layout_above="@+id/linearLayout"
             android:layout_centerHorizontal="true"
+            android:maxLines="1"
             android:hint="Hasło" />
 
         <EditText
             android:id="@+id/activity_registration_tvPasswordSnd"
             style="@style/CustomEditText"
             android:layout_above="@+id/linearLayout"
+            android:maxLines="1"
             android:layout_centerHorizontal="true"
             android:hint="Hasło" />
 
