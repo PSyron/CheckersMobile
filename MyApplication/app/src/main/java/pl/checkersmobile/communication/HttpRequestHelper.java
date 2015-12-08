@@ -9,11 +9,13 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import de.greenrobot.event.EventBus;
 import pl.checkersmobile.Constants;
 import pl.checkersmobile.utils.Logger;
+import pl.checkersmobile.utils.PrefsHelper;
 import pl.checkersmobile.utils.Utils;
 
 /**
@@ -122,6 +124,13 @@ public class HttpRequestHelper {
 
                     @Override
                     public void onResponse(JSONObject response) {
+                        if (response.has("Session")) {
+                            try {
+                                PrefsHelper.setSessionToken(response.getString("Session"));
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
                         EventBus.getDefault().post(new BaseEvent(ResponseStatus.SUCCESS));
                     }
                 }, new Response.ErrorListener() {
