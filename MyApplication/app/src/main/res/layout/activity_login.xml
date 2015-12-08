@@ -11,8 +11,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
         android:layout_below="@+id/linearLayout2"
+        android:layout_centerHorizontal="true"
         android:layout_marginTop="24dp"
         android:orientation="vertical">
 
@@ -28,14 +28,14 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/linearLayout2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/linearLayout3"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:orientation="vertical"
-        android:layout_below="@+id/linearLayout3"
         android:layout_marginTop="24dp"
-        android:id="@+id/linearLayout2">
+        android:orientation="vertical">
 
         <EditText
             android:id="@+id/activity_login_tvLogin"
@@ -43,44 +43,44 @@
             android:layout_above="@+id/linearLayout"
             android:layout_centerHorizontal="true"
 
-            android:maxLines="1"
-            android:hint="Login" />
+            android:hint="Login"
+            android:maxLines="1" />
 
         <EditText
             android:id="@+id/activity_login_tvPassword"
             style="@style/CustomEditText"
             android:layout_above="@+id/linearLayout"
-
-            android:maxLines="1"
             android:layout_centerHorizontal="true"
-            android:hint="Hasło" />
+            android:hint="Hasło"
+            android:inputType="textPassword"
+            android:maxLines="1" />
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/linearLayout3"
-        android:orientation="vertical"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginTop="80dp"
-        android:layout_centerHorizontal="true">
+        android:orientation="vertical">
 
         <TextView
             style="@style/LogoTextLarge"
-            android:layout_height="match_parent"
             android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
-            android:text="WARCABY"
-            android:layout_alignParentTop="true" />
+            android:text="WARCABY" />
 
         <TextView
             style="@style/LogoTextLarge.Small"
-            android:layout_height="match_parent"
             android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
-            android:text="wersja mobilna"
-            android:layout_alignParentBottom="true" />
+            android:text="wersja mobilna" />
     </LinearLayout>
 
 </RelativeLayout>

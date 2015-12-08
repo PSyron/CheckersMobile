@@ -40,6 +40,13 @@ public class RegistrationActivity extends Activity {
         EventBus.getDefault().unregister(this);
     }
 
+    @Override
+    public void onBackPressed() {
+        Intent myIntent = new Intent(this, LoginActivity.class);
+        startActivity(myIntent);
+        finish();
+    }
+
     @OnClick(R.id.activity_registration_btnRegister)
     protected void register() {
         HttpRequestHelper.getInstance(this).register(tvLogin.getText().toString(), tvLogin.getText().toString(), tvPassword.getText().toString());

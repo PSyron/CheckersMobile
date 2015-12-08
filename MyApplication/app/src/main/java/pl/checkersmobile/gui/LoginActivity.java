@@ -54,6 +54,7 @@ public class LoginActivity extends FragmentActivity {
     {
         Intent myIntent = new Intent(this, RegistrationActivity.class);
         this.startActivity(myIntent);
+        finish();
     }
 
     public void onEvent(BaseEvent event) {
