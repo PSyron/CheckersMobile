@@ -12,9 +12,6 @@ public class CheckerApplication extends Application {
     private static CheckerApplication sInstance;
 
     public static synchronized CheckerApplication getInstance() {
-        if (sInstance == null) {
-            sInstance = new CheckerApplication();
-        }
         return sInstance;
     }
 
@@ -27,5 +24,6 @@ public class CheckerApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        sInstance = this;
     }
 }
