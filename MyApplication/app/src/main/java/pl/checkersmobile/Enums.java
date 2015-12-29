@@ -11,4 +11,10 @@ public class Enums {
         PlayerTwo,
         GameTable
     }
+
+    public enum PieceColor
+    {
+        Black,
+        White
+    }
 }
