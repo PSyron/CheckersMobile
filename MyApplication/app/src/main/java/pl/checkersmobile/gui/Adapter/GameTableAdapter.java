@@ -8,8 +8,12 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 
+import java.security.Policy;
+import java.util.ArrayList;
+
 import pl.checkersmobile.Enums;
 import pl.checkersmobile.R;
+import pl.checkersmobile.gui.Piece;
 
 public class GameTableAdapter extends BaseAdapter {
 
@@ -17,11 +21,13 @@ public class GameTableAdapter extends BaseAdapter {
     private final int mMobileValues;
     Enums.GridTableType mGridType;
     LayoutInflater inflater;
+    ArrayList<Piece> checkers;
 
-    public GameTableAdapter(Context context, Enums.GridTableType inGridType) {
+    public GameTableAdapter(Context context, Enums.GridTableType inGridType, ArrayList<Piece> inCheckers) {
 
         this.context = context;
         mGridType = inGridType;
+        checkers = inCheckers;
         mMobileValues = mGridType == Enums.GridTableType.GameTable ? 64 : 12;
 
         inflater = (LayoutInflater) context
@@ -69,24 +75,32 @@ public class GameTableAdapter extends BaseAdapter {
             if (inPosition%2 == 0)
             {
                 inImageView.setBackground(ContextCompat.getDrawable(context, R.drawable.bng_light));
-                inImageView.setImageResource(R.drawable.piece_black);
             }
             else {
                 inImageView.setBackground(ContextCompat.getDrawable(context, R.drawable.bng_dark));
-                inImageView.setImageResource(R.drawable.piece_white);
             }
         }
         else
         {
             if (inPosition%2 == 0) {
                 inImageView.setBackground(ContextCompat.getDrawable(context, R.drawable.bng_dark));
-                inImageView.setImageResource(R.drawable.piece_white);
             }
             else {
                 inImageView.setBackground(ContextCompat.getDrawable(context, R.drawable.bng_light));
-                inImageView.setImageResource(R.drawable.piece_black);
             }
         }
+
+        for (Piece checker : checkers)
+        {
+            if(checker.position == inPosition)
+            {
+                if(checker.pieceColor == Enums.PieceColor.Black)
+                    inImageView.setImageResource(R.drawable.piece_black);
+                else
+                    inImageView.setImageResource(R.drawable.piece_white);
+            }
+        }
+
 
         return inImageView;
     }
