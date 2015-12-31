@@ -1,19 +1,16 @@
 package pl.checkersmobile.gui;
 
 import android.os.Bundle;
-import android.app.Activity;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.GridView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -49,6 +46,37 @@ public class GameTableActivity extends BaseAppBarActivity {
         setStartingPosition();
         initBoard();
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_item, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            // action with ID action_refresh was selected
+            case R.id.action_invite:
+                Toast.makeText(this, "Zaproszenie do gry", Toast.LENGTH_SHORT)
+                        .show();
+                break;
+            case R.id.action_stats:
+                Toast.makeText(this, "Statystyki", Toast.LENGTH_SHORT)
+                        .show();
+                break;
+            case R.id.action_leave:
+                Toast.makeText(this, "Wyjscie z gry", Toast.LENGTH_SHORT)
+                        .show();
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+
+        return true;
+    }
+
+
 
     private void initBoard()
     {

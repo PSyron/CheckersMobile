@@ -13,13 +13,30 @@
     </style>
 
     <style name="AppBarStyle" parent="@style/Theme.AppCompat.Light">
-        <!-- Customize your theme here. -->
         <item name="android:windowBackground">@drawable/game_bng</item>
         <item name="android:windowFullscreen">true</item>
-        <item name="colorPrimary">@color/buttonText</item>
-        <item name="colorPrimaryDark">@color/buttonBng</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="actionBarStyle">@style/MyActionBarStyle</item>
+        <item name="android:dropDownListViewStyle">@style/PopupMenuListView</item>
+        <item name="actionBarDivider">@null</item>
+        <item name="android:textColor">@color/buttonText</item>
         <item name="android:textColorPrimary">@android:color/white</item>
+    </style>
+
+    <style name="MyActionBarStyle" parent="@style/Widget.AppCompat.Light.ActionBar">
+        <item name="android:background">@color/buttonText</item>
+        <item name="background">@color/buttonText</item>
+        <item name="android:titleTextStyle">@style/MyActionBarTitleText</item>
+        <item name="titleTextStyle">@style/MyActionBarTitleText</item>
+    </style>
+
+    <style name="MyActionBarTitleText" parent="@style/TextAppearance.AppCompat.Widget.ActionBar.Title">
+        <item name="android:textColor">@android:color/white</item>
+    </style>
+
+    <style name="PopupMenuListView" parent="@style/Widget.AppCompat.Light.ListView.DropDown">
+        <item name="android:divider">@color/buttonText</item>
+        <item name="android:dividerHeight">2dp</item>
+        <item name="android:background">@color/buttonBng</item>
     </style>
 
     <style name="CustomButton" parent="@android:style/Widget.TextView">
