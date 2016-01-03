@@ -1,4 +1,4 @@
-package pl.checkersmobile.gui.Adapter;
+package pl.checkersmobile.Adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;

@@ -5,8 +5,8 @@ import android.widget.ListView;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import pl.checkersmobile.Adapter.InvitationsAdapter;
 import pl.checkersmobile.R;
-import pl.checkersmobile.gui.Adapter.InvitationsAdapter;
 
 public class InvitationsActivity extends BaseAppBarActivity {
 
