@@ -15,8 +15,12 @@
 
 
         <TextView
-            android:id="@+id/activity_gametable_tvScore1"
+            android:id="@+id/activity_gametable_message"
             style="@style/ItemListText.Small.Bold"
+            android:singleLine="true"
+            android:ellipsize="marquee"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:scrollHorizontally="true"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text=""/>

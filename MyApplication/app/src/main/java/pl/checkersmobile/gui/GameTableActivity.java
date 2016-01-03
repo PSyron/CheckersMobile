@@ -1,11 +1,15 @@
 package pl.checkersmobile.gui;
 
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -34,7 +38,7 @@ public class GameTableActivity extends BaseAppBarActivity {
         TextView tvNick1;
         @Bind(R.id.activity_gametable_tvNick2)
         TextView tvNick2;*/
-    @Bind(R.id.activity_gametable_tvScore1)
+    @Bind(R.id.activity_gametable_message)
     TextView message;
     @Bind(R.id.activity_gametable_tvScore2)
     TextView tvScore2;
@@ -68,6 +72,7 @@ public class GameTableActivity extends BaseAppBarActivity {
 
     void doNewGame() {
         // Begin a new game.
+        message.setSelected(true);
         if (gameInProgress == true) {
             // This should not be possible, but it doens't
             // hurt to check.
@@ -85,7 +90,7 @@ public class GameTableActivity extends BaseAppBarActivity {
         initBoard();
     }
 
-  /*  @Override
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_item, menu);
@@ -112,7 +117,7 @@ public class GameTableActivity extends BaseAppBarActivity {
         }
 
         return true;
-    }*/
+    }
 
 
     private void initBoard()
