@@ -1,0 +1,15 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+
+    <item
+        android:id="@+id/action_invite"
+        android:title="Zaproś do gry" />
+
+    <item
+        android:id="@+id/action_stats"
+        android:title="Statystyki"/>
+
+    <item
+        android:id="@+id/action_leave"
+        android:title="Wyjdź z gry" />
+</menu> 
