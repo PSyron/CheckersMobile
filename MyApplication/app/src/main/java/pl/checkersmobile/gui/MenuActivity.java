@@ -1,15 +1,14 @@
 package pl.checkersmobile.gui;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.app.Activity;
 import android.widget.TextView;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import pl.checkersmobile.R;
-import pl.checkersmobile.gui.Adapter.InvitationsAdapter;
 
 public class MenuActivity extends Activity {
 
