@@ -5,5 +5,7 @@
     <color name="colorAccent">#FF4081</color>
     <color name="buttonText">#FF9800</color>
     <color name="buttonBng">#893520</color>
+    <color name="jumpMove">#8BC34A</color>
+    <color name="availableMove">#FFA726</color>
 
 </resources>

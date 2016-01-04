@@ -3,9 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-              android:orientation="vertical"
-              tools:context="pl.checkersmobile.gui.GameTableActivity">
-
+    android:orientation="vertical"
+    tools:context="pl.checkersmobile.gui.GameTableActivity">
 
     <LinearLayout
         android:id="@+id/linearLayout5"
@@ -17,67 +16,66 @@
         <TextView
             android:id="@+id/activity_gametable_message"
             style="@style/ItemListText.Small.Bold"
-            android:singleLine="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:ellipsize="marquee"
             android:marqueeRepeatLimit="marquee_forever"
             android:scrollHorizontally="true"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text=""/>
+            android:singleLine="true"
+            android:text="" />
 
     </LinearLayout>
-
-    <GridView
-        android:id="@+id/activity_gametable_gv1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="0dp"
-        android:clickable="false"
-        android:gravity="center"
-        android:horizontalSpacing="2dp"
-        android:listSelector="@null"
-        android:numColumns="12"
-        android:stretchMode="columnWidth"/>
 
     <GridView
         android:id="@+id/activity_gametable_gvMain"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="400dp"
         android:layout_margin="8dp"
         android:gravity="center"
+        android:horizontalSpacing="0dp"
         android:numColumns="8"
-        android:stretchMode="columnWidth"/>
+        android:stretchMode="columnWidth"
+        android:verticalSpacing="0dp" />
+
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="8dp">
+        android:layout_height="wrap_content">
 
         <TextView
-            android:id="@+id/activity_gametable_tvNick2"
-            style="@style/ItemListText.Small.Bold"
+            android:id="@+id/activity_gametable_tvScore1"
+            style="@style/ItemListText.Small.Bold.Score"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="NickTwo:"/>
+            android:text="Score1:" />
 
         <TextView
-            android:id="@+id/activity_gametable_tvScore2"
-            style="@style/ItemListText.Small.Bold"
+            android:id="@+id/activity_gametable_tvScoreValue1"
+            style="@style/ItemListText.Small.Bold.Score"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Score"/>
+            android:text="0" />
 
     </LinearLayout>
 
-    <GridView
-        android:id="@+id/activity_gametable_gv2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="4dp"
-        android:gravity="center"
-        android:horizontalSpacing="2dp"
-        android:listSelector="@android:color/transparent"
-        android:numColumns="12"
-        android:stretchMode="columnWidth"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/activity_gametable_tvScore2"
+            style="@style/ItemListText.Small.Bold.Score"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Score2:" />
+
+        <TextView
+            android:id="@+id/activity_gametable_tvScoreValue2"
+            style="@style/ItemListText.Small.Bold.Score"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0" />
+    </LinearLayout>
+
 
 </LinearLayout>

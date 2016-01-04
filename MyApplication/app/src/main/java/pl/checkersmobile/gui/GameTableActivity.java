@@ -1,5 +1,7 @@
 package pl.checkersmobile.gui;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -10,6 +12,8 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.util.ArrayList;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -30,23 +34,28 @@ public class GameTableActivity extends BaseAppBarActivity {
             BLACK_KING = 4;
     @Bind(R.id.activity_gametable_gvMain)
     GridView gvMain;
-    @Bind(R.id.activity_gametable_gv1)
-    GridView gv1;
-    @Bind(R.id.activity_gametable_gv2)
-    GridView gv2;
     /*    @Bind(R.id.activity_gametable_tvNick1)
         TextView tvNick1;
         @Bind(R.id.activity_gametable_tvNick2)
         TextView tvNick2;*/
     @Bind(R.id.activity_gametable_message)
     TextView message;
+    @Bind(R.id.activity_gametable_tvScore1)
+    TextView tvScore1;
+    @Bind(R.id.activity_gametable_tvScoreValue1)
+    TextView tvScoreValue1;
     @Bind(R.id.activity_gametable_tvScore2)
     TextView tvScore2;
+    @Bind(R.id.activity_gametable_tvScoreValue2)
+    TextView tvScoreValue2;
+
     CheckersData board;  // The data for the checkers board is kept here.
     //    This board is also responsible for generating
     //    lists of legal moves.
 
     boolean gameInProgress; // Is a game currently in progress?
+    int actualRow = -1;
+    int actualCol = -1;
 
    /* The next three variables are valid only when the game is in progress. */
 
@@ -66,14 +75,14 @@ public class GameTableActivity extends BaseAppBarActivity {
         setContentView(R.layout.activity_gametable);
         ButterKnife.bind(this);
         board = new CheckersData();
-        doNewGame();
+        doNewGame(false);
         //initBoard();
     }
 
-    void doNewGame() {
+    void doNewGame(boolean isForceStart) {
         // Begin a new game.
         message.setSelected(true);
-        if (gameInProgress == true) {
+        if (gameInProgress == true && !isForceStart) {
             // This should not be possible, but it doens't
             // hurt to check.
             message.setText("Finish the current game first!");
@@ -102,15 +111,20 @@ public class GameTableActivity extends BaseAppBarActivity {
         switch (item.getItemId()) {
             // action with ID action_refresh was selected
             case R.id.action_invite:
-                Toast.makeText(this, "Zaproszenie do gry", Toast.LENGTH_SHORT)
+                Toast.makeText(this, "Zaproś do gry", Toast.LENGTH_SHORT)
                         .show();
+                break;
+            case R.id.action_newgame:
+                Toast.makeText(this, "Statystyki", Toast.LENGTH_SHORT)
+                        .show();
+                createAndShowAlertDialog();
                 break;
             case R.id.action_stats:
                 Toast.makeText(this, "Statystyki", Toast.LENGTH_SHORT)
                         .show();
                 break;
             case R.id.action_leave:
-                Toast.makeText(this, "Wyjscie z gry", Toast.LENGTH_SHORT)
+                Toast.makeText(this, "Wyjście z gry", Toast.LENGTH_SHORT)
                         .show();
             default:
                 return super.onOptionsItemSelected(item);
@@ -120,8 +134,7 @@ public class GameTableActivity extends BaseAppBarActivity {
     }
 
 
-    private void initBoard()
-    {
+    private void initBoard() {
         //gv1.setAdapter(new GameTableAdapter(this, Enums.GridTableType.PlayerOne));
         //gv2.setAdapter(new GameTableAdapter(this, Enums.GridTableType.PlayerTwo));
         //  setStartingPosition();
@@ -136,6 +149,8 @@ public class GameTableActivity extends BaseAppBarActivity {
                 else {
                     int col = position % 8;
                     int row = position / 8;
+                    actualRow = row;
+                    actualCol = col;
                     if (col >= 0 && col < 8 && row >= 0 && row < 8)
                         doClickSquare(row, col);
                 }
@@ -170,6 +185,7 @@ public class GameTableActivity extends BaseAppBarActivity {
 
         if (selectedRow < 0) {
             message.setText("Click the piece you want to move.");
+            refreshGrid();
             return;
         }
 
@@ -188,16 +204,28 @@ public class GameTableActivity extends BaseAppBarActivity {
          Show an error message. */
 
         message.setText("Click the square you want to move to.");
+        refreshGrid();
 
     }  // end doClickSquare()
 
     void refreshGrid() {
-        mAdapter = new GameTableAdapter(this, Enums.GridTableType.GameTable, board.board);
+        mAdapter = new GameTableAdapter(this, Enums.GridTableType.GameTable, board.board, getLegalPositions());
         gvMain.setAdapter(mAdapter);
     }
 
+    ArrayList<Integer> getLegalPositions() {
+
+        ArrayList<Integer> tempPositions = new ArrayList<Integer>();
+        if (legalMoves != null && legalMoves.length > 0) {
+            for (int i = 0; i < legalMoves.length; i++)
+                if (actualRow == legalMoves[i].fromRow && actualCol == legalMoves[i].fromCol)
+                    tempPositions.add(legalMoves[i].toRow * 8 + legalMoves[i].toCol);
+        }
+        return tempPositions;
+    }
+
     void doMakeMove(CheckersMove move) {
-        // Thiis is called when the current player has chosen the specified
+        // This is called when the current player has chosen the specified
         // move.  Make the move, and then either end or continue the game
         // appropriately.
 
@@ -291,12 +319,29 @@ public class GameTableActivity extends BaseAppBarActivity {
     // pewnie to psuje drag&dropa, zobaczymy jak to rozwiazac
     @OnTouch(R.id.activity_gametable_gvMain)
     public boolean onTouch(View v, MotionEvent event) {
-        if(event.getAction() == MotionEvent.ACTION_MOVE){
+        if (event.getAction() == MotionEvent.ACTION_MOVE) {
             return true;
         }
         return false;
     }
 
-
+    private void createAndShowAlertDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Aktualna rozgrywka zostanie zakończona. Czy jesteś pewien?");
+        builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                //TODO
+                doNewGame(true);
+                dialog.dismiss();
+            }
+        });
+        builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                dialog.dismiss();
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
 
 }

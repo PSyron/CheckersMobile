@@ -41,7 +41,7 @@
 
     <style name="CustomButton" parent="@android:style/Widget.TextView">
         <item name="android:textColor">@color/buttonText</item>
-        <item name="android:textSize">24sp</item>
+        <item name="android:textSize">20sp</item>
         <item name="android:textStyle">normal</item>
         <item name="android:layout_width">@dimen/custom_btn_horizontal</item>
         <item name="android:layout_height">@dimen/custom_btn_vertical</item>
@@ -68,7 +68,7 @@
 
     <style name="LogoTextLarge" parent="@android:style/Widget.TextView">
         <item name="android:textColor">@android:color/black</item>
-        <item name="android:textSize">64sp</item>
+        <item name="android:textSize">56sp</item>
         <item name="android:textStyle">italic|bold</item>
         <item name="android:background">@android:color/transparent</item>
         <item name="android:gravity">center</item>
@@ -97,6 +97,10 @@
     <style name="ItemListText.Small.Bold" >
         <item name="android:textSize">24sp</item>
         <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="ItemListText.Small.Bold.Score" >
+        <item name="android:textSize">20sp</item>
     </style>
 
 

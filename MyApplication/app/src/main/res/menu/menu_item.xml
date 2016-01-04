@@ -6,6 +6,10 @@
         android:title="Zaproś do gry" />
 
     <item
+        android:id="@+id/action_newgame"
+        android:title="Nowa gra" />
+
+    <item
         android:id="@+id/action_stats"
         android:title="Statystyki"/>
 
