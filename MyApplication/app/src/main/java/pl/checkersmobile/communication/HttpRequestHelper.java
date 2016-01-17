@@ -9,11 +9,16 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import de.greenrobot.event.EventBus;
 import pl.checkersmobile.Constants;
+import pl.checkersmobile.model.Invite;
 import pl.checkersmobile.utils.Logger;
 import pl.checkersmobile.utils.PrefsHelper;
 import pl.checkersmobile.utils.Utils;
@@ -174,13 +179,13 @@ public class HttpRequestHelper {
 
                     @Override
                     public void onResponse(JSONObject response) {
-                        Logger.logD(TAG, response.toString());
+                        Logger.logD("checkActivePlayers", response.toString());
                     }
                 }, new Response.ErrorListener() {
 
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Logger.logE(TAG, error.getMessage());
+                        Logger.logE("checkActivePlayers", error.getMessage());
                     }
                 });
 
@@ -270,5 +275,45 @@ public class HttpRequestHelper {
 
         addToRequestQueue(jsObjRequest);
     }
+
+
+    public void getInvites(String session) {
+        String url = Constants.SERVICES_DOMAIN + Constants.TABLE_GET_INVITATIONS + session;
+        Logger.logD(TAG, "getInvites " + url);
+        JsonObjectRequest jsObjRequest = new JsonObjectRequest
+                (Request.Method.GET, url, "", new Response.Listener<JSONObject>() {
+
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            if (response.getBoolean("Successful")) {
+                                List<Invite> invites = new ArrayList<>();
+                                JSONArray array = response.getJSONArray("Invites");
+                                for (int i = 0; i < array.length(); i++) {
+                                    JSONObject object = (JSONObject) array.get(i);
+                                    Invite invite = new Invite(object.getString("dateString"), object
+                                            .getString("idGame"), object.getString("playerName"));
+                                    invites.add(invite);
+                                }
+                                EventBus.getDefault().post(new GetInvitesEvent(ResponseStatus
+                                        .SUCCESS, invites));
+                            }
+                        } catch (JSONException e) {
+                            EventBus.getDefault().post(new GetInvitesEvent(ResponseStatus
+                                    .FAILURE, null));
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        EventBus.getDefault().post(new GetInvitesEvent(ResponseStatus
+                                .FAILURE, null));
+                    }
+                });
+        addToRequestQueue(jsObjRequest);
+    }
+
     //endregion
 }

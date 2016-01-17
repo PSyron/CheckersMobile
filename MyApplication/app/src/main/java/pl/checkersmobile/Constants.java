@@ -17,4 +17,7 @@ public class Constants {
     public static final String COMMUNITY_GET_FRIENDS = "Community.svc/getFriends/"; //{sessionToken}
     public static final String COMMUNITY_ADD_FRIEND = "Community.svc/addFriend/"; // {sessionToken}/{friendName}
     public static final String COMMUNITY_REMOVE_FRIEND = "Community.svc/removeFriend/"; // {sessionToken}/{friendName}
+
+
+    public static final String TABLE_GET_INVITATIONS = "Table.svc/getInvitations/"; //{sessionToken}
 }

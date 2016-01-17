@@ -7,7 +7,11 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import pl.checkersmobile.R;
+import pl.checkersmobile.model.Invite;
 
 /**
  * Created by Tomek on 03.12.2015.
@@ -29,24 +33,24 @@ public class InvitationsAdapter extends BaseAdapter {
     private static LayoutInflater inflater = null;
     Context mContext;
     //TODO sprecyzowanie modelu
-    private String[] mModel = null;
+    private List<Invite> invites = new ArrayList<>();
 
-    public InvitationsAdapter(Context ctx, String[] inModel) {
+    public InvitationsAdapter(Context ctx, List<Invite> inModel) {
         mContext = ctx;
         inflater  = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        mModel = inModel;
+        invites = inModel;
     }
 
     @Override
-    public Object getItem(int position) {
+    public Invite getItem(int position) {
 
-        return mModel[position];
+        return invites.get(position);
     }
 
     @Override
     public int getCount() {
 
-        return mModel.length;
+        return invites.size();
     }
 
     @Override
@@ -64,8 +68,8 @@ public class InvitationsAdapter extends BaseAdapter {
         holder.name = (TextView) rowView.findViewById(R.id.item_invitations_tvName);
         holder.time = (TextView) rowView.findViewById(R.id.item_invitations_tvTime);
 
-        holder.name.setText(mModel[position]);
-        holder.time.setText(mModel[position]);
+        holder.name.setText(invites.get(position).getPlayerName());
+        holder.time.setText("Nr stołu " + invites.get(position).getIdGame());
 
         return rowView;
     }
