@@ -88,9 +88,9 @@ public class GameTableAdapter extends BaseAdapter {
 
      /*   for (int i = 0; i < checkers.length; i++) {
             for (int j = 0; j < checkers[i].length; j++) {*/
-        if(legalPositions != null && legalPositions.size() > 0){
-            for (int legalMove: legalPositions) {
-                if(legalMove == inPosition)
+        if (legalPositions != null && legalPositions.size() > 0) {
+            for (int legalMove : legalPositions) {
+                if (legalMove == inPosition)
                     inImageView.setBackgroundColor(ContextCompat.getColor(context, R.color.availableMove));
             }
         }
@@ -102,6 +102,30 @@ public class GameTableAdapter extends BaseAdapter {
         }
 
         return inImageView;
+    }
+
+    public int getWhiteCount() {
+        int count = 0;
+        for (int i = 0; i < checkers.length; i++) {
+            for (int j = 0; j < checkers[i].length; j++) {
+                if (checkers[i][j] == CheckersData.WHITE || checkers[i][j] == CheckersData.WHITE_KING) {
+                    count++;
+                }
+            }
+        }
+        return count;
+    }
+
+    public int getBlackCount() {
+        int count = 0;
+        for (int i = 0; i < checkers.length; i++) {
+            for (int j = 0; j < checkers[i].length; j++) {
+                if (checkers[i][j] == CheckersData.BLACK || checkers[i][j] == CheckersData.BLACK_KING) {
+                    count++;
+                }
+            }
+        }
+        return count;
     }
 
     @Override

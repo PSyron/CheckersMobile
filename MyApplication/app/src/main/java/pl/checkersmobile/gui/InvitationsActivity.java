@@ -15,6 +15,7 @@ import pl.checkersmobile.communication.event.AcceptInvitationEvent;
 import pl.checkersmobile.communication.event.GetInvitesEvent;
 import pl.checkersmobile.interfaces.InviteInterface;
 import pl.checkersmobile.model.Invite;
+import pl.checkersmobile.model.User;
 import pl.checkersmobile.utils.PrefsHelper;
 
 public class InvitationsActivity extends BaseAppBarActivity implements InviteInterface {
@@ -50,6 +51,11 @@ public class InvitationsActivity extends BaseAppBarActivity implements InviteInt
     public void onAcceptClicked(Invite invite) {
         HttpRequestHelper.getInstance(this).acceptInvitation(PrefsHelper.getSessionToken(), invite
                 .getIdGame());
+    }
+
+    @Override
+    public void onSendInvitationClicked(User user) {
+        // nie dotyczy
     }
 
 

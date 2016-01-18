@@ -21,8 +21,10 @@ import pl.checkersmobile.CheckerApplication;
 import pl.checkersmobile.Constants;
 import pl.checkersmobile.communication.event.AcceptInvitationEvent;
 import pl.checkersmobile.communication.event.BaseEvent;
+import pl.checkersmobile.communication.event.GetActivePlayersEvent;
 import pl.checkersmobile.communication.event.GetInvitesEvent;
 import pl.checkersmobile.model.Invite;
+import pl.checkersmobile.model.User;
 import pl.checkersmobile.utils.Logger;
 import pl.checkersmobile.utils.PrefsHelper;
 import pl.checkersmobile.utils.Utils;
@@ -187,6 +189,21 @@ public class HttpRequestHelper {
 
                     @Override
                     public void onResponse(JSONObject response) {
+                        JSONArray array = null;
+
+                        List<User> users = new ArrayList<>();
+                        try {
+                            array = response.getJSONArray("Users");
+                            for (int i = 0; i < array.length(); i++) {
+                                JSONObject object = (JSONObject) array.get(i);
+                                users.add(new User(object.getString("name")));
+                            }
+                            EventBus.getDefault().post(new GetActivePlayersEvent(ResponseStatus
+                                    .SUCCESS, users));
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        Logger.logD("checkActivePlayers", users.size() + "");
                         Logger.logD("checkActivePlayers", response.toString());
                     }
                 }, new Response.ErrorListener() {
@@ -405,6 +422,26 @@ public class HttpRequestHelper {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Logger.logE(TAG, "getAcceptedInvitations success");
+                    }
+                });
+        addToRequestQueue(jsObjRequest);
+    }
+
+    public void sendInvitations(String sessionToken, String name, String gameId) {
+        String url = Constants.SERVICES_DOMAIN + Constants.TABLE_SEND_INVITATION + sessionToken
+                + "/" + name + "/" + gameId;
+        Logger.logD(TAG, "sendInvitations " + url);
+        JsonObjectRequest jsObjRequest = new JsonObjectRequest
+                (Request.Method.GET, url, "", new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Logger.logD(TAG, "sendInvitations success");
+                    }
+                }, new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Logger.logE(TAG, "sendInvitations success");
                     }
                 });
         addToRequestQueue(jsObjRequest);

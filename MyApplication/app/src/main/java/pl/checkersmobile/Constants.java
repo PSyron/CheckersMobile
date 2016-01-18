@@ -24,5 +24,6 @@ public class Constants {
     public static final String TABLE_GET_OPONENT = "Table.svc/xxx/"; //TODO
     public static final String TABLE_REFUSE_INVITATION = "Table.svc/refuseInvitation/";
     public static final String TABLE_ACCEPT_INVITATION = "Table.svc/acceptInvite/";
+    public static final String TABLE_SEND_INVITATION = "Table.svc/invitePlayer/"; // sesja, friendname, game id
     //{sessionToken}
 }

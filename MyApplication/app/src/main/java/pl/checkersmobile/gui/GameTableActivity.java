@@ -84,7 +84,8 @@ public class GameTableActivity extends BaseAppBarActivity {
         setContentView(R.layout.activity_gametable);
         ButterKnife.bind(this);
         board = new CheckersData();
-        //  doNewGame(false);
+        doNewGame(false);
+        tvScore1.setText(PrefsHelper.getUserLogin());
         //initBoard();
     }
 
@@ -110,7 +111,7 @@ public class GameTableActivity extends BaseAppBarActivity {
     }
 
     private void showPlayerList() {
-        HttpRequestHelper.getInstance(this).checkActivePlayers(PrefsHelper.getSessionToken());
+        //HttpRequestHelper.getInstance(this).checkActivePlayers(PrefsHelper.getSessionToken());
         isPlayerListVisible = true;
         mContainer.setVisibility(View.VISIBLE);
         mLayoutContainer.setVisibility(View.GONE);
@@ -244,6 +245,8 @@ public class GameTableActivity extends BaseAppBarActivity {
 
     void refreshGrid() {
         mAdapter = new GameTableAdapter(this, Enums.GridTableType.GameTable, board.board, getLegalPositions());
+        tvScoreValue2.setText((12 - mAdapter.getWhiteCount()) + "");
+        tvScoreValue1.setText((12 - mAdapter.getBlackCount()) + "");
         gvMain.setAdapter(mAdapter);
     }
 
