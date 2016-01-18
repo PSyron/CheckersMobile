@@ -11,9 +11,9 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import de.greenrobot.event.EventBus;
 import pl.checkersmobile.R;
-import pl.checkersmobile.communication.BaseEvent;
 import pl.checkersmobile.communication.HttpRequestHelper;
 import pl.checkersmobile.communication.ResponseStatus;
+import pl.checkersmobile.communication.event.BaseEvent;
 
 public class RegistrationActivity extends Activity {
 

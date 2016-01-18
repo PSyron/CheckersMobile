@@ -1,7 +1,8 @@
-package pl.checkersmobile.communication;
+package pl.checkersmobile.communication.event;
 
 import java.util.List;
 
+import pl.checkersmobile.communication.ResponseStatus;
 import pl.checkersmobile.model.Invite;
 
 /**

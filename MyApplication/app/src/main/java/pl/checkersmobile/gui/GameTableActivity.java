@@ -9,7 +9,9 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.FrameLayout;
 import android.widget.GridView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,10 +21,14 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnTouch;
 import pl.checkersmobile.Adapter.GameTableAdapter;
+import pl.checkersmobile.CheckerApplication;
 import pl.checkersmobile.CheckersData;
 import pl.checkersmobile.CheckersMove;
 import pl.checkersmobile.Enums;
 import pl.checkersmobile.R;
+import pl.checkersmobile.communication.HttpRequestHelper;
+import pl.checkersmobile.fragment.InviteToGameFragment;
+import pl.checkersmobile.utils.PrefsHelper;
 
 public class GameTableActivity extends BaseAppBarActivity {
 
@@ -34,10 +40,7 @@ public class GameTableActivity extends BaseAppBarActivity {
             BLACK_KING = 4;
     @Bind(R.id.activity_gametable_gvMain)
     GridView gvMain;
-    /*    @Bind(R.id.activity_gametable_tvNick1)
-        TextView tvNick1;
-        @Bind(R.id.activity_gametable_tvNick2)
-        TextView tvNick2;*/
+
     @Bind(R.id.activity_gametable_message)
     TextView message;
     @Bind(R.id.activity_gametable_tvScore1)
@@ -48,6 +51,12 @@ public class GameTableActivity extends BaseAppBarActivity {
     TextView tvScore2;
     @Bind(R.id.activity_gametable_tvScoreValue2)
     TextView tvScoreValue2;
+
+    @Bind(R.id.fragment_container)
+    FrameLayout mContainer;
+    @Bind(R.id.layout_container)
+    LinearLayout mLayoutContainer;
+    boolean isPlayerListVisible = false;
 
     CheckersData board;  // The data for the checkers board is kept here.
     //    This board is also responsible for generating
@@ -75,11 +84,12 @@ public class GameTableActivity extends BaseAppBarActivity {
         setContentView(R.layout.activity_gametable);
         ButterKnife.bind(this);
         board = new CheckersData();
-        doNewGame(false);
+        //  doNewGame(false);
         //initBoard();
     }
 
     void doNewGame(boolean isForceStart) {
+        HttpRequestHelper.getInstance(this).createTable(PrefsHelper.getSessionToken());
         // Begin a new game.
         message.setSelected(true);
         if (gameInProgress == true && !isForceStart) {
@@ -92,11 +102,27 @@ public class GameTableActivity extends BaseAppBarActivity {
         currentPlayer = CheckersData.WHITE;   // WHITE moves first.
         legalMoves = board.getLegalMoves(CheckersData.WHITE);  // Get WHITE's legal moves.
         selectedRow = -1;   // WHITE has not yet selected a piece to move.
-        message.setText("Red:  Make your move.");
+        message.setText("White:  Make your move.");
         gameInProgress = true;
         // newGameButton.setEnabled(false);
         //resignButton.setEnabled(true);
         initBoard();
+    }
+
+    private void showPlayerList() {
+        HttpRequestHelper.getInstance(this).checkActivePlayers(PrefsHelper.getSessionToken());
+        isPlayerListVisible = true;
+        mContainer.setVisibility(View.VISIBLE);
+        mLayoutContainer.setVisibility(View.GONE);
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new
+                InviteToGameFragment()).commit();
+    }
+
+    private void hidePlayerList() {
+        isPlayerListVisible = true;
+        mContainer.setVisibility(View.VISIBLE);
+        mLayoutContainer.setVisibility(View.GONE);
+        //TODO remove fragment
     }
 
     @Override
@@ -106,26 +132,37 @@ public class GameTableActivity extends BaseAppBarActivity {
         return true;
     }
 
+
+    @Override
+    public void onBackPressed() {
+        if (isPlayerListVisible) {
+            hidePlayerList();
+        } else {
+            CheckerApplication.getInstance().stopLookingForPlayers();
+            super.onBackPressed();
+        }
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             // action with ID action_refresh was selected
+            case R.id.home:
+                onBackPressed();
+                break;
             case R.id.action_invite:
                 Toast.makeText(this, "Zaproś do gry", Toast.LENGTH_SHORT)
                         .show();
+                showPlayerList();
+                CheckerApplication.getInstance().startLookingForPlayers();
                 break;
             case R.id.action_newgame:
-                Toast.makeText(this, "Statystyki", Toast.LENGTH_SHORT)
-                        .show();
                 createAndShowAlertDialog();
                 break;
             case R.id.action_stats:
                 Toast.makeText(this, "Statystyki", Toast.LENGTH_SHORT)
                         .show();
                 break;
-            case R.id.action_leave:
-                Toast.makeText(this, "Wyjście z gry", Toast.LENGTH_SHORT)
-                        .show();
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -135,9 +172,6 @@ public class GameTableActivity extends BaseAppBarActivity {
 
 
     private void initBoard() {
-        //gv1.setAdapter(new GameTableAdapter(this, Enums.GridTableType.PlayerOne));
-        //gv2.setAdapter(new GameTableAdapter(this, Enums.GridTableType.PlayerTwo));
-        //  setStartingPosition();
         mAdapter = new GameTableAdapter(this, Enums.GridTableType.GameTable, board.board);
         gvMain.setAdapter(mAdapter);
         gvMain.setOnItemClickListener(new AdapterView.OnItemClickListener() {

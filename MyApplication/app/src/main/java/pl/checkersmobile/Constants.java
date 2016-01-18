@@ -20,4 +20,9 @@ public class Constants {
 
 
     public static final String TABLE_GET_INVITATIONS = "Table.svc/getInvitations/"; //{sessionToken}
+    public static final String TABLE_CREATE = "Table.svc/createTable/";
+    public static final String TABLE_GET_OPONENT = "Table.svc/xxx/"; //TODO
+    public static final String TABLE_REFUSE_INVITATION = "Table.svc/refuseInvitation/";
+    public static final String TABLE_ACCEPT_INVITATION = "Table.svc/acceptInvite/";
+    //{sessionToken}
 }

@@ -17,7 +17,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.greenrobot.event.EventBus;
+import pl.checkersmobile.CheckerApplication;
 import pl.checkersmobile.Constants;
+import pl.checkersmobile.communication.event.AcceptInvitationEvent;
+import pl.checkersmobile.communication.event.BaseEvent;
+import pl.checkersmobile.communication.event.GetInvitesEvent;
 import pl.checkersmobile.model.Invite;
 import pl.checkersmobile.utils.Logger;
 import pl.checkersmobile.utils.PrefsHelper;
@@ -129,14 +133,18 @@ public class HttpRequestHelper {
 
                     @Override
                     public void onResponse(JSONObject response) {
-                        if (response.has("Session")) {
-                            try {
+                        try {
+                            if (response.has("Session") && response.getString("Session").length() > 0
+                                    ) {
                                 PrefsHelper.setSessionToken(response.getString("Session"));
-                            } catch (JSONException e) {
-                                e.printStackTrace();
+                                EventBus.getDefault().post(new BaseEvent(ResponseStatus.SUCCESS));
+                            } else {
+                                EventBus.getDefault().post(new BaseEvent(ResponseStatus.FAILURE));
                             }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            EventBus.getDefault().post(new BaseEvent(ResponseStatus.FAILURE));
                         }
-                        EventBus.getDefault().post(new BaseEvent(ResponseStatus.SUCCESS));
                     }
                 }, new Response.ErrorListener() {
 
@@ -310,6 +318,93 @@ public class HttpRequestHelper {
                     public void onErrorResponse(VolleyError error) {
                         EventBus.getDefault().post(new GetInvitesEvent(ResponseStatus
                                 .FAILURE, null));
+                    }
+                });
+        addToRequestQueue(jsObjRequest);
+    }
+
+    public void refuseInvitation(String sessionToken, String idGame) {
+        String url = Constants.SERVICES_DOMAIN + Constants.TABLE_REFUSE_INVITATION + sessionToken
+                + "/" + idGame;
+        Logger.logD(TAG, "refuseInvitation " + url);
+        JsonObjectRequest jsObjRequest = new JsonObjectRequest
+                (Request.Method.GET, url, "", new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Logger.logD(TAG, "refuseInvitation success");
+                    }
+                }, new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Logger.logE(TAG, "refuseInvitation success");
+                    }
+                });
+        addToRequestQueue(jsObjRequest);
+    }
+
+    public void acceptInvitation(String sessionToken, String idGame) {
+        String url = Constants.SERVICES_DOMAIN + Constants.TABLE_ACCEPT_INVITATION + sessionToken
+                + "/" + idGame;
+        Logger.logD(TAG, "acceptInvitation " + url);
+        JsonObjectRequest jsObjRequest = new JsonObjectRequest
+                (Request.Method.GET, url, "", new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Logger.logD(TAG, "acceptInvitation success");
+                        EventBus.getDefault().post(new AcceptInvitationEvent(ResponseStatus.SUCCESS));
+                    }
+                }, new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Logger.logE(TAG, "acceptInvitation success");
+                        EventBus.getDefault().post(new AcceptInvitationEvent(ResponseStatus.FAILURE));
+                    }
+                });
+        addToRequestQueue(jsObjRequest);
+    }
+
+    public void createTable(String sessionToken) {
+        String url = Constants.SERVICES_DOMAIN + Constants.TABLE_CREATE + sessionToken;
+        Logger.logD(TAG, "createTable " + url);
+        JsonObjectRequest jsObjRequest = new JsonObjectRequest
+                (Request.Method.GET, url, "", new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Logger.logD(TAG, "createTable success");
+                        try {
+                            PrefsHelper.setGameId(Integer.valueOf(response.getString("Message")) + "");
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Logger.logE(TAG, "createTable success");
+                    }
+                });
+        addToRequestQueue(jsObjRequest);
+    }
+
+    public void getAcceptedInvitations(String sessionToken, String idGame) {
+        String url = Constants.SERVICES_DOMAIN + Constants.TABLE_GET_OPONENT + sessionToken
+                + "/" + idGame;
+        Logger.logD(TAG, "getAcceptedInvitations " + url);
+        JsonObjectRequest jsObjRequest = new JsonObjectRequest
+                (Request.Method.GET, url, "", new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Logger.logD(TAG, "getAcceptedInvitations success");
+                        CheckerApplication.getInstance().stopLookingForPlayers();
+                    }
+                }, new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Logger.logE(TAG, "getAcceptedInvitations success");
                     }
                 });
         addToRequestQueue(jsObjRequest);

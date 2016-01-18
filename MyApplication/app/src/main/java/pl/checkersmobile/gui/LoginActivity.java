@@ -11,9 +11,10 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import de.greenrobot.event.EventBus;
 import pl.checkersmobile.R;
-import pl.checkersmobile.communication.BaseEvent;
 import pl.checkersmobile.communication.HttpRequestHelper;
 import pl.checkersmobile.communication.ResponseStatus;
+import pl.checkersmobile.communication.event.BaseEvent;
+import pl.checkersmobile.utils.PrefsHelper;
 import pl.checkersmobile.utils.Utils;
 
 public class LoginActivity extends FragmentActivity {
@@ -60,6 +61,7 @@ public class LoginActivity extends FragmentActivity {
     public void onEvent(BaseEvent event) {
         Utils.hideProgressDialog(getSupportFragmentManager());
         if(event.getStatus() == ResponseStatus.SUCCESS){
+            PrefsHelper.setUserLogin(tvLogin.getText().toString());
             Intent myIntent = new Intent(this, MenuActivity.class);
             this.startActivity(myIntent);
             finish();

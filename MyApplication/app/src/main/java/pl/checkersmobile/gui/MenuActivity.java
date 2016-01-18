@@ -38,9 +38,4 @@ public class MenuActivity extends Activity {
         Intent myIntent = new Intent(this, GameTableActivity.class);
         this.startActivity(myIntent);
     }
-
-
-
-
-
 }

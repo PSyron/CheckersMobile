@@ -1,4 +1,6 @@
-package pl.checkersmobile.communication;
+package pl.checkersmobile.communication.event;
+
+import pl.checkersmobile.communication.ResponseStatus;
 
 /**
  * Created by syron on 07.12.15.
