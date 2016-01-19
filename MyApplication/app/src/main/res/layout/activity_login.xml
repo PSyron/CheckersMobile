@@ -42,9 +42,9 @@
             style="@style/CustomEditText"
             android:layout_above="@+id/linearLayout"
             android:layout_centerHorizontal="true"
-
             android:hint="Login"
-            android:maxLines="1" />
+            android:maxLines="1"
+            android:singleLine="true"/>
 
         <EditText
             android:id="@+id/activity_login_tvPassword"
@@ -53,7 +53,8 @@
             android:layout_centerHorizontal="true"
             android:hint="Hasło"
             android:inputType="textPassword"
-            android:maxLines="1" />
+            android:maxLines="1"
+            android:singleLine="true"/>
     </LinearLayout>
 
     <LinearLayout
