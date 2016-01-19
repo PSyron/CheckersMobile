@@ -1,5 +1,6 @@
 package pl.checkersmobile.gui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -23,6 +24,7 @@ public class InvitationsActivity extends BaseAppBarActivity implements InviteInt
     @Bind(R.id.activity_invitations_list)
     ListView mInvitationList;
     InvitationsAdapter mAdapter;
+    Invite mInvite;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +51,7 @@ public class InvitationsActivity extends BaseAppBarActivity implements InviteInt
 
     @Override
     public void onAcceptClicked(Invite invite) {
+        mInvite = invite;
         HttpRequestHelper.getInstance(this).acceptInvitation(PrefsHelper.getSessionToken(), invite
                 .getIdGame());
     }
@@ -71,7 +74,12 @@ public class InvitationsActivity extends BaseAppBarActivity implements InviteInt
 
     public void onEvent(AcceptInvitationEvent event) {
         if (event.getStatus() == ResponseStatus.SUCCESS) {
-            //TODO
+            Intent intent = new Intent(this, GameTableActivity.class);
+            intent.putExtra(GameTableActivity.EXTRA_IS_WHIE, false);
+            intent.putExtra(GameTableActivity.EXTRA_ENEMY_NAME, mInvite.getPlayerName());
+            PrefsHelper.setGameId(event.getGameID());
+            startActivity(intent);
+            finish();
         } else {
             Toast.makeText(this, R.string.error_occurred, Toast.LENGTH_SHORT).show();
         }

@@ -43,6 +43,12 @@ public class InviteToGameFragment extends Fragment implements InviteInterface {
     }
 
     @Override
+    public void onDestroy() {
+        EventBus.getDefault().unregister(this);
+        super.onDestroy();
+    }
+
+    @Override
     public void onRefuseClicked(Invite invite) {
         // nie dotyczy
     }

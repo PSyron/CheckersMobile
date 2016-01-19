@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnTouch;
+import de.greenrobot.event.EventBus;
 import pl.checkersmobile.Adapter.GameTableAdapter;
 import pl.checkersmobile.CheckerApplication;
 import pl.checkersmobile.CheckersData;
@@ -30,13 +31,17 @@ import pl.checkersmobile.R;
 import pl.checkersmobile.communication.HttpRequestHelper;
 import pl.checkersmobile.communication.ResponseStatus;
 import pl.checkersmobile.communication.event.GetEnemyMovesEvent;
+import pl.checkersmobile.communication.event.OnAcceptedInviteEvent;
 import pl.checkersmobile.fragment.InviteToGameFragment;
 import pl.checkersmobile.model.Move;
 import pl.checkersmobile.utils.PrefsHelper;
 
 public class GameTableActivity extends BaseAppBarActivity {
 
+    public static final String EXTRA_IS_WHIE = "extra_is_white";
+    public static final String EXTRA_ENEMY_NAME = "extra_enemy_name";
     private final static int INTERVAL = 1000 * 5; //5 sec
+    public static int LAST_MOVE_ID = 0;
     @Bind(R.id.activity_gametable_gvMain)
     GridView gvMain;
     @Bind(R.id.activity_gametable_message)
@@ -56,15 +61,14 @@ public class GameTableActivity extends BaseAppBarActivity {
     boolean isPlayerListVisible = false;
     boolean isWhite = true;
     boolean isOnline = false;
-    int lastMoveId = 0;
     //    This board is also responsible for generating
     //    lists of legal moves.
     CheckersData board;  // The data for the checkers board is kept here.
     boolean gameInProgress; // Is a game currently in progress?
     int actualRow = -1;
 
-   /* The next three variables are valid only when the game is in progress. */
-   int actualCol = -1;
+    /* The next three variables are valid only when the game is in progress. */
+    int actualCol = -1;
     int currentPlayer;      // Whose turn is it now?  The possible values
     //    are CheckersData.WHITE and CheckersData.BLACK.
     int selectedRow, selectedCol;  // If the current player has selected a piece to
@@ -72,14 +76,14 @@ public class GameTableActivity extends BaseAppBarActivity {
     //     containing that piece.  If no piece is
     //     yet selected, then selectedRow is -1.
     CheckersMove[] legalMoves;  // An array containing the legal moves for the
-    String mFirstPlayer = PrefsHelper.getUserLogin();
-    String mSecondPlayer = PrefsHelper.getUserLogin();
-    Handler mHandler;
+    String mFirstPlayer = "Biały";
+    String mSecondPlayer = "Czarny";
+    Handler mHandler = new Handler();
     Runnable mHandlerTask = new Runnable() {
         @Override
         public void run() {
             HttpRequestHelper.getInstance(CheckerApplication.getInstance()).getLastMoves
-                    (PrefsHelper.getSessionToken(), PrefsHelper.getGameId(), lastMoveId + "");
+                    (PrefsHelper.getSessionToken(), PrefsHelper.getGameId(), LAST_MOVE_ID + "");
             mHandler.postDelayed(mHandlerTask, INTERVAL);
         }
     };
@@ -91,20 +95,52 @@ public class GameTableActivity extends BaseAppBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gametable);
         ButterKnife.bind(this);
+        EventBus.getDefault().register(this);
         board = new CheckersData();
         doNewGame(false);
-        tvScore1.setText(mFirstPlayer);
-        tvScore2.setText(mSecondPlayer);
-        HttpRequestHelper.getInstance(this).createTable(PrefsHelper.getSessionToken());
+        LAST_MOVE_ID = 0;
+        getSupportActionBar().setTitle("Gra offline");
         getSupportActionBar().setHomeButtonEnabled(true);
+
+        if (getIntent().hasExtra(EXTRA_ENEMY_NAME)) {
+            onPlayerBlackJoin(getIntent().getStringExtra(EXTRA_ENEMY_NAME));
+        } else {
+            tvScore1.setText(mFirstPlayer + ":");
+            tvScore2.setText(mSecondPlayer + ":");
+            HttpRequestHelper.getInstance(this).createTable(PrefsHelper.getSessionToken());
+        }
         //initBoard();
     }
 
-    void onPlayerJoin(String secondName) {
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
+
+    void onPlayerWhiteBack(String secondName) {
+        hidePlayerList();
+        getSupportActionBar().setTitle("Gra online");
         isOnline = true;
+        isWhite = true;
+        mFirstPlayer = PrefsHelper.getUserLogin();
         mSecondPlayer = secondName;
-        tvScore2.setText(mSecondPlayer);
+        tvScore1.setText(mFirstPlayer + ":");
+        tvScore2.setText(mSecondPlayer + ":");
         doNewGame(true);
+        startGetMoves();
+    }
+
+    void onPlayerBlackJoin(String firstPlayer) {
+        getSupportActionBar().setTitle("Gra online");
+        isOnline = true;
+        isWhite = false;
+        mFirstPlayer = firstPlayer;
+        mSecondPlayer = PrefsHelper.getUserLogin();
+        tvScore1.setText(mFirstPlayer + ":");
+        tvScore2.setText(mSecondPlayer + ":");
+        doNewGame(true);
+        startGetMoves();
     }
 
     void doNewGame(boolean isForceStart) {
@@ -114,14 +150,14 @@ public class GameTableActivity extends BaseAppBarActivity {
         if (gameInProgress == true && !isForceStart) {
             // This should not be possible, but it doens't
             // hurt to check.
-            message.setText("Finish the current game first!");
+            message.setText("Skończ pierwsze aktualną gre!");
             return;
         }
         board.setUpGame();   // Set up the pieces.
         currentPlayer = CheckersData.WHITE;   // WHITE moves first.
         legalMoves = board.getLegalMoves(CheckersData.WHITE);  // Get WHITE's legal moves.
         selectedRow = -1;   // WHITE has not yet selected a piece to move.
-        message.setText(mFirstPlayer + ":  Make your move.");
+        message.setText(mFirstPlayer + getString(R.string.make_move));
         gameInProgress = true;
         // newGameButton.setEnabled(false);
         //resignButton.setEnabled(true);
@@ -154,12 +190,12 @@ public class GameTableActivity extends BaseAppBarActivity {
     @Override
     protected void onRestart() {
         super.onRestart();
-        startGetMoves();
+
     }
 
     @Override
     protected void onPause() {
-        stopGetMoves();
+
         super.onPause();
     }
 
@@ -169,6 +205,7 @@ public class GameTableActivity extends BaseAppBarActivity {
             hidePlayerList();
         } else {
             CheckerApplication.getInstance().stopLookingForPlayers();
+            stopGetMoves();
             super.onBackPressed();
         }
     }
@@ -206,9 +243,9 @@ public class GameTableActivity extends BaseAppBarActivity {
         gvMain.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (isOnline && ((isWhite && currentPlayer == CheckersData.WHITE) || (!isWhite &&
+                if ((isOnline && ((isWhite && currentPlayer == CheckersData.WHITE) || (!isWhite &&
                         currentPlayer ==
-                                CheckersData.BLACK))) {
+                                CheckersData.BLACK))) || !isOnline) {
                     if (gameInProgress == false)
                         message.setText("Click \"New Game\" to start a new game.");
                     else {
@@ -240,9 +277,9 @@ public class GameTableActivity extends BaseAppBarActivity {
                 selectedRow = row;
                 selectedCol = col;
                 if (currentPlayer == CheckersData.WHITE)
-                    message.setText("WHITE:  Make your move.");
+                    message.setText(mFirstPlayer + ":  " + getString(R.string.make_move));
                 else
-                    message.setText("BLACK:  Make your move.");
+                    message.setText(mSecondPlayer + ":  " + getString(R.string.make_move));
                 refreshGrid();
                 return;
             }
@@ -250,8 +287,8 @@ public class GameTableActivity extends BaseAppBarActivity {
       /* If no piece has been selected to be moved, the user must first
          select a piece.  Show an error message and return. */
 
-        if (selectedRow < 0) {
-            message.setText("Click the piece you want to move.");
+        if (selectedRow < 0 && currentPlayer == (isWhite ? CheckersData.WHITE : CheckersData.BLACK)) {
+            message.setText("Zaznacz pionka którego chcesz poruszyć");
             refreshGrid();
             return;
         }
@@ -269,8 +306,9 @@ public class GameTableActivity extends BaseAppBarActivity {
       /* If we get to this point, there is a piece selected, and the square where
          the user just clicked is not one where that piece can be legally moved.
          Show an error message. */
-
-        message.setText("Click the square you want to move to.");
+        if (currentPlayer == (isWhite ? CheckersData.WHITE : CheckersData.BLACK)) {
+            message.setText("Zaznacz pole na które chcesz przenieść pionka");
+        }
         refreshGrid();
 
     }  // end doClickSquare()
@@ -299,7 +337,9 @@ public class GameTableActivity extends BaseAppBarActivity {
         // appropriately.
 
         board.makeMove(move);
-
+        if (isOnline && currentPlayer == (isWhite ? CheckersData.WHITE : CheckersData.BLACK))
+            HttpRequestHelper.getInstance(this).makeMove(PrefsHelper.getSessionToken(), PrefsHelper
+                    .getGameId(), move);
       /* If the move was a jump, it's possible that the player has another
          jump.  Check for legal jumps starting from the square that the player
          just moved to.  If there are any, the player must jump.  The same
@@ -310,9 +350,9 @@ public class GameTableActivity extends BaseAppBarActivity {
             legalMoves = board.getLegalJumpsFrom(currentPlayer, move.toRow, move.toCol);
             if (legalMoves != null) {
                 if (currentPlayer == CheckersData.WHITE)
-                    message.setText(mFirstPlayer + ":  You must continue jumping.");
+                    message.setText(mFirstPlayer + ":  musi skakać dalej.");
                 else
-                    message.setText(mSecondPlayer + ":  You must continue jumping.");
+                    message.setText(mSecondPlayer + ": musi skakać dalej.");
                 selectedRow = move.toRow;  // Since only one piece can be moved, select it.
                 selectedCol = move.toCol;
                 refreshGrid();
@@ -323,27 +363,29 @@ public class GameTableActivity extends BaseAppBarActivity {
       /* The current player's turn is ended, so change to the other player.
          Get that player's legal moves.  If the player has no legal moves,
          then the game ends. */
-        if (isOnline)
+        if (isOnline && currentPlayer == (isWhite ? CheckersData.WHITE : CheckersData.BLACK))
             HttpRequestHelper.getInstance(this).finishMove(PrefsHelper.getSessionToken(), PrefsHelper
                     .getGameId());
         if (currentPlayer == CheckersData.WHITE) {
             currentPlayer = CheckersData.BLACK;
             legalMoves = board.getLegalMoves(currentPlayer);
             if (legalMoves == null)
-                gameOver(mSecondPlayer + " has no moves. " + mFirstPlayer + " wins.");
+                gameOver(mSecondPlayer + " niema ruchu. " + mFirstPlayer + " wygrywa.");
             else if (legalMoves[0].isJump())
-                message.setText(mSecondPlayer + ":  Make your move.  You must jump.");
+                message.setText(mSecondPlayer + ":  " + getString(R.string.make_move) + ".  Musi " +
+                        "skakać.");
             else
-                message.setText(mSecondPlayer + ":  Make your move.");
+                message.setText(mSecondPlayer + ":  " + getString(R.string.make_move));
         } else {
             currentPlayer = CheckersData.WHITE;
             legalMoves = board.getLegalMoves(currentPlayer);
             if (legalMoves == null)
-                gameOver(mFirstPlayer + " has no moves. " + mSecondPlayer + " wins.");
+                gameOver(mFirstPlayer + " niema ruchu. " + mSecondPlayer + " wygrywa.");
             else if (legalMoves[0].isJump())
-                message.setText(mFirstPlayer + ":  Make your move.  You must jump.");
+                message.setText(mFirstPlayer + ":  " + getString(R.string.make_move) + ".  Musi " +
+                        "skakać.");
             else
-                message.setText(mFirstPlayer + ":  Make your move.");
+                message.setText(mFirstPlayer + ":  " + getString(R.string.make_move));
         }
 
       /* Set selectedRow = -1 to record that the player has not yet selected
@@ -413,26 +455,36 @@ public class GameTableActivity extends BaseAppBarActivity {
         dialog.show();
     }
 
-    void startGetMoves() {
+    public void startGetMoves() {
         if (isOnline)
             mHandlerTask.run();
     }
 
-    void stopGetMoves() {
+    public void stopGetMoves() {
         if (mHandler != null)
             mHandler.removeCallbacks(mHandlerTask);
     }
 
+
     public void onEvent(GetEnemyMovesEvent event) {
         if (event.getStatus() == ResponseStatus.SUCCESS) {
             //Ruch jest nowszy niz ostatni tutaj
-            if (lastMoveId < event.getMoves().get(event.getMoves().size()).getIdMove()) {
-                lastMoveId = event.getMoves().get(event.getMoves().size()).getIdMove();
+            if (LAST_MOVE_ID < event.getMoves().get(event.getMoves().size() - 1).getIdMove()) {
+                LAST_MOVE_ID = event.getMoves().get(event.getMoves().size() - 1).getIdMove();
                 for (Move move : event.getMoves()) {
-                    doMakeMove(move.getCheckerMove());
+                    if (move.getPreColumn() > -1) //it is not -1 or -2
+                        doMakeMove(move.getCheckerMove());
                 }
                 currentPlayer = isWhite ? CheckersData.WHITE : CheckersData.BLACK;
             }
+        } else {
+            Toast.makeText(this, R.string.error_occurred, Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public void onEvent(OnAcceptedInviteEvent event) {
+        if (event.getStatus() == ResponseStatus.SUCCESS) {
+            onPlayerWhiteBack(event.getSecondPlayerName());
         } else {
             Toast.makeText(this, R.string.error_occurred, Toast.LENGTH_SHORT).show();
         }

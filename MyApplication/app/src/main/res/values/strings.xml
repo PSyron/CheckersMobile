@@ -8,5 +8,6 @@
     <string name="title_activity_game_table">GameTableActivity</string>
     <string name="invitation">Zaproszenia</string>
     <string name="error_occurred">Wystąpił błąd</string>
+    <string name="make_move">:  Wykonaj ruch.</string>
 
 </resources>

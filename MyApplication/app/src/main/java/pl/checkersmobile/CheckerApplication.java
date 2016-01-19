@@ -17,9 +17,8 @@ public class CheckerApplication extends Application {
     private Handler mHandler = new Handler();
     private Runnable mUpdateTimeTask = new Runnable() {
         public void run() {
-            //TODO ask database for playerList
             HttpRequestHelper.getInstance(CheckerApplication.this).getAcceptedInvitations
-                    (PrefsHelper.getSessionToken(), PrefsHelper.getGameId());
+                    (PrefsHelper.getSessionToken());
             mHandler.postDelayed(mUpdateTimeTask, INTERVAL);
         }
     };
@@ -49,4 +48,6 @@ public class CheckerApplication extends Application {
             mHandler.removeCallbacks(mUpdateTimeTask);
         }
     }
+
+
 }

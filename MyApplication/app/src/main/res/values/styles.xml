@@ -24,7 +24,7 @@
 
     <style name="MyActionBarStyle" parent="@style/Widget.AppCompat.Light.ActionBar">
         <item name="android:background">@color/buttonText</item>
-        <item name="background">@color/buttonText</item>
+        <item name="background">@color/buttonBng</item>
         <item name="android:titleTextStyle">@style/MyActionBarTitleText</item>
         <item name="titleTextStyle">@style/MyActionBarTitleText</item>
     </style>

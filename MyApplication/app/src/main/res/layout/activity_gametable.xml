@@ -52,14 +52,16 @@
                 style="@style/ItemListText.Small.Bold.Score"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Score1:"/>
+                android:text="Score1:"
+                android:textColor="@android:color/white"/>
 
             <TextView
                 android:id="@+id/activity_gametable_tvScoreValue1"
                 style="@style/ItemListText.Small.Bold.Score"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="0"/>
+                android:text="0"
+                android:textColor="@android:color/white"/>
 
         </LinearLayout>
 
@@ -72,14 +74,16 @@
                 style="@style/ItemListText.Small.Bold.Score"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Score2:"/>
+                android:text="Score2:"
+                android:textColor="@android:color/darker_gray"/>
 
             <TextView
                 android:id="@+id/activity_gametable_tvScoreValue2"
                 style="@style/ItemListText.Small.Bold.Score"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="0"/>
+                android:text="0"
+                android:textColor="@android:color/darker_gray"/>
         </LinearLayout>
     </LinearLayout>
 

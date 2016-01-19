@@ -35,6 +35,7 @@ public class LoginActivity extends FragmentActivity {
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
         EventBus.getDefault().register(this);
+        tvLogin.setText(PrefsHelper.getUserLogin());
     }
 
     @Override

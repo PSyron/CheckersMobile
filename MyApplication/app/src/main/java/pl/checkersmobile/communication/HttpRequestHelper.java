@@ -18,12 +18,15 @@ import java.util.List;
 
 import de.greenrobot.event.EventBus;
 import pl.checkersmobile.CheckerApplication;
+import pl.checkersmobile.CheckersMove;
 import pl.checkersmobile.Constants;
 import pl.checkersmobile.communication.event.AcceptInvitationEvent;
 import pl.checkersmobile.communication.event.BaseEvent;
 import pl.checkersmobile.communication.event.GetActivePlayersEvent;
 import pl.checkersmobile.communication.event.GetEnemyMovesEvent;
 import pl.checkersmobile.communication.event.GetInvitesEvent;
+import pl.checkersmobile.communication.event.OnAcceptedInviteEvent;
+import pl.checkersmobile.gui.GameTableActivity;
 import pl.checkersmobile.model.Invite;
 import pl.checkersmobile.model.Move;
 import pl.checkersmobile.model.User;
@@ -117,7 +120,15 @@ public class HttpRequestHelper {
 
                     @Override
                     public void onResponse(JSONObject response) {
-                        EventBus.getDefault().post(new BaseEvent(ResponseStatus.SUCCESS));
+                        try {
+                            if (response.has("Authorized") && response.getBoolean("Authorized")) {
+                                EventBus.getDefault().post(new BaseEvent(ResponseStatus.SUCCESS));
+                            } else {
+                                EventBus.getDefault().post(new BaseEvent(ResponseStatus.FAILURE));
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                     }
                 }, new Response.ErrorListener() {
 
@@ -370,8 +381,17 @@ public class HttpRequestHelper {
                 (Request.Method.GET, url, "", new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        Logger.logD(TAG, "acceptInvitation success");
-                        EventBus.getDefault().post(new AcceptInvitationEvent(ResponseStatus.SUCCESS));
+                        try {
+                            if (response.has("Successful") && response.getBoolean("Successful")) {
+                                Logger.logD(TAG, "acceptInvitation success");
+                                EventBus.getDefault().post(new AcceptInvitationEvent(ResponseStatus
+                                        .SUCCESS, response.getString("Message")));
+                            } else {
+                                EventBus.getDefault().post(new AcceptInvitationEvent(ResponseStatus.FAILURE));
+                            }
+                        } catch (Exception e) {
+
+                        }
                     }
                 }, new Response.ErrorListener() {
 
@@ -408,21 +428,47 @@ public class HttpRequestHelper {
         addToRequestQueue(jsObjRequest);
     }
 
-    public void getAcceptedInvitations(String sessionToken, String idGame) {
-        String url = Constants.SERVICES_DOMAIN + Constants.TABLE_GET_ENEMY + sessionToken
-                + "/" + idGame;
+    public void getAcceptedInvitations(String sessionToken) {
+        String url = Constants.SERVICES_DOMAIN + Constants.GAME_GET_ENEMY + sessionToken;
         Logger.logD(TAG, "getAcceptedInvitations " + url);
         JsonObjectRequest jsObjRequest = new JsonObjectRequest
                 (Request.Method.GET, url, "", new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        Logger.logD(TAG, "getAcceptedInvitations success");
-                        CheckerApplication.getInstance().stopLookingForPlayers();
+                        //TODO
+                        try {
+                            if (response.has("Games")) {
+                                JSONArray array = response.getJSONArray("Games");
+                                if (array.length() > 0) {
+                                    for (int i = 0; i < array.length(); i++) {
+                                        JSONObject object = (JSONObject) array.get(i);
+                                        if (object.has("idGame") && object.getString("idGame")
+                                                .equals(PrefsHelper
+                                                        .getGameId())) {
+                                            CheckerApplication.getInstance().stopLookingForPlayers();
+                                            EventBus.getDefault().post(new OnAcceptedInviteEvent
+                                                    (ResponseStatus.SUCCESS, object.getString
+                                                            ("Player2name")));
+                                            Logger.logE(TAG, "getAcceptedInvitations success");
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+                            //Else szukaj dalej
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Logger.logE(TAG, "getAcceptedInvitations failure");
+                        }
+
+
                     }
                 }, new Response.ErrorListener() {
 
                     @Override
                     public void onErrorResponse(VolleyError error) {
+                        EventBus.getDefault().post(new OnAcceptedInviteEvent
+                                (ResponseStatus.FAILURE));
                         Logger.logE(TAG, "getAcceptedInvitations error");
                     }
                 });
@@ -465,19 +511,14 @@ public class HttpRequestHelper {
                                     for (int i = 0; i < array.length(); i++) {
                                         JSONObject object = (JSONObject) array.get(i);
                                         Move move = new Move(object.getInt("idGame"), object.getInt
-                                                ("postColumn"), object.getInt("postRow"), object.getInt("preColumn"), object.getInt
-                                                ("preRow"), object.getInt("idMove"));
+                                                ("postColumn") - 1, object.getInt("postRow") - 1, object
+                                                .getInt("preRow") - 1, object.getInt
+                                                ("preColumn") - 1, object.getInt("idMove"));
                                         moves.add(move);
                                     }
                                     EventBus.getDefault().post(new GetEnemyMovesEvent(ResponseStatus
                                             .SUCCESS, moves));
-                                } else {
-                                    EventBus.getDefault().post(new GetEnemyMovesEvent(ResponseStatus
-                                            .FAILURE));
                                 }
-                            } else {
-                                EventBus.getDefault().post(new GetEnemyMovesEvent(ResponseStatus
-                                        .FAILURE));
                             }
                         } catch (JSONException e) {
                             EventBus.getDefault().post(new GetEnemyMovesEvent(ResponseStatus
@@ -505,6 +546,14 @@ public class HttpRequestHelper {
                     @Override
                     public void onResponse(JSONObject response) {
                         Logger.logD(TAG, "finishMove success");
+                        try {
+                            int id = Integer.valueOf(response.getString
+                                    ("Message"));
+                            if (id > GameTableActivity.LAST_MOVE_ID)
+                                GameTableActivity.LAST_MOVE_ID = id;
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                     }
                 }, new Response.ErrorListener() {
 
@@ -515,5 +564,37 @@ public class HttpRequestHelper {
                 });
         addToRequestQueue(jsObjRequest);
     }
+
+    public void makeMove(String sessionToken, String gameID, CheckersMove move) {
+        String url = Constants.SERVICES_DOMAIN + Constants.GAME_MAKE_MOVE + sessionToken
+                + "/" + gameID + "/" + (move.fromRow + 1) + "/" + (move.fromCol + 1) + "/" + (move
+                .toRow + 1) + "/" + (move.toCol + 1);
+        Logger.logD(TAG, "makeMove " + url);
+        JsonObjectRequest jsObjRequest = new JsonObjectRequest
+                (Request.Method.GET, url, "", new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Logger.logD(TAG, "makeMove success");
+                        if (response.has("Message")) {
+                            try {
+                                int id = Integer.valueOf(response.getString
+                                        ("Message"));
+                                if (id > GameTableActivity.LAST_MOVE_ID)
+                                    GameTableActivity.LAST_MOVE_ID = id;
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                }, new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Logger.logE(TAG, "makeMove error");
+                    }
+                });
+        addToRequestQueue(jsObjRequest);
+    }
+
     //endregion
 }

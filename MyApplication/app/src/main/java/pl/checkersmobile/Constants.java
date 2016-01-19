@@ -21,11 +21,13 @@ public class Constants {
 
     public static final String TABLE_GET_INVITATIONS = "Table.svc/getInvitations/"; //{sessionToken}
     public static final String TABLE_CREATE = "Table.svc/createTable/";
-    public static final String TABLE_GET_ENEMY = "Table.svc/xxx/"; //TODO
+    public static final String GAME_GET_ENEMY = "Game.svc/getFullGames/"; //TODO
     public static final String TABLE_REFUSE_INVITATION = "Table.svc/refuseInvitation/";
     public static final String TABLE_ACCEPT_INVITATION = "Table.svc/acceptInvite/";
     public static final String TABLE_SEND_INVITATION = "Table.svc/invitePlayer/"; // sesja, friendname, game id
 
     public static final String GAME_GET_LAST_MOVES = "Game.svc/getLastMoves/";
     public static final String GAME_FINISH_MOVE = "Game.svc/finishMove/";
+    public static final String GAME_MAKE_MOVE = "Game.svc/movePawn/";
+
 }
