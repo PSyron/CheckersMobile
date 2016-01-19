@@ -218,18 +218,18 @@ public class GameTableActivity extends BaseAppBarActivity {
                 onBackPressed();
                 break;
             case R.id.action_invite:
-                Toast.makeText(this, "Zaproś do gry", Toast.LENGTH_SHORT)
-                        .show();
+               /* Toast.makeText(this, "Zaproś do gry", Toast.LENGTH_SHORT)
+                        .show();*/
                 showPlayerList();
                 CheckerApplication.getInstance().startLookingForPlayers();
                 break;
             case R.id.action_newgame:
                 createAndShowAlertDialog();
                 break;
-            case R.id.action_stats:
-                Toast.makeText(this, "Statystyki", Toast.LENGTH_SHORT)
-                        .show();
-                break;
+            //    case R.id.action_stats:
+             /*   Toast.makeText(this, "Statystyki", Toast.LENGTH_SHORT)
+                        .show();*/
+            //  break;
             default:
                 return super.onOptionsItemSelected(item);
         }
