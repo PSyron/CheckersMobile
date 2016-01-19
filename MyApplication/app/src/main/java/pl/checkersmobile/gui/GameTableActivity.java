@@ -40,7 +40,7 @@ public class GameTableActivity extends BaseAppBarActivity {
 
     public static final String EXTRA_IS_WHIE = "extra_is_white";
     public static final String EXTRA_ENEMY_NAME = "extra_enemy_name";
-    private final static int INTERVAL = 1000 * 5; //5 sec
+    private final static int INTERVAL = 1000 * 2; //5 sec
     public static int LAST_MOVE_ID = 0;
     @Bind(R.id.activity_gametable_gvMain)
     GridView gvMain;
@@ -247,7 +247,7 @@ public class GameTableActivity extends BaseAppBarActivity {
                         currentPlayer ==
                                 CheckersData.BLACK))) || !isOnline) {
                     if (gameInProgress == false)
-                        message.setText("Click \"New Game\" to start a new game.");
+                        message.setText("Wybierz nową gre");
                     else {
                         int col = position % 8;
                         int row = position / 8;
@@ -357,15 +357,18 @@ public class GameTableActivity extends BaseAppBarActivity {
                 selectedCol = move.toCol;
                 refreshGrid();
                 return;
+            } else {
+                sendFinishMove();
             }
+        } else {
+            sendFinishMove();
         }
+
 
       /* The current player's turn is ended, so change to the other player.
          Get that player's legal moves.  If the player has no legal moves,
          then the game ends. */
-        if (isOnline && currentPlayer == (isWhite ? CheckersData.WHITE : CheckersData.BLACK))
-            HttpRequestHelper.getInstance(this).finishMove(PrefsHelper.getSessionToken(), PrefsHelper
-                    .getGameId());
+
         if (currentPlayer == CheckersData.WHITE) {
             currentPlayer = CheckersData.BLACK;
             legalMoves = board.getLegalMoves(currentPlayer);
@@ -411,10 +414,25 @@ public class GameTableActivity extends BaseAppBarActivity {
             }
         }
 
+
       /* Make sure the board is redrawn in its new state. */
 
         refreshGrid();
     }  // end doMakeMove();
+
+    void sendFinishMove() {
+   /*     final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (isOnline && currentPlayer == (isWhite ? CheckersData.WHITE : CheckersData.BLACK))
+                    HttpRequestHelper.getInstance(GameTableActivity.this).finishMove(PrefsHelper
+                                    .getSessionToken(),
+                            PrefsHelper
+                            .getGameId());
+            }
+        }, 1000);*/
+    }
 
     void gameOver(String str) {
         // The game ends.  The parameter, str, is displayed as a message
@@ -474,8 +492,11 @@ public class GameTableActivity extends BaseAppBarActivity {
                 for (Move move : event.getMoves()) {
                     if (move.getPreColumn() > -1) //it is not -1 or -2
                         doMakeMove(move.getCheckerMove());
+                   /* else{
+                        currentPlayer = isWhite ? CheckersData.WHITE : CheckersData.BLACK;
+                    }*/
                 }
-                currentPlayer = isWhite ? CheckersData.WHITE : CheckersData.BLACK;
+                //  currentPlayer = isWhite ? CheckersData.WHITE : CheckersData.BLACK;
             }
         } else {
             Toast.makeText(this, R.string.error_occurred, Toast.LENGTH_SHORT).show();

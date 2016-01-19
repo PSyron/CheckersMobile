@@ -530,7 +530,8 @@ public class HttpRequestHelper {
 
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Logger.logE(TAG, "getLastMoves error");
+                        error.printStackTrace();
+                        Logger.logE(TAG, "getLastMoves error " + error.getMessage());
                     }
                 });
         addToRequestQueue(jsObjRequest);
@@ -565,11 +566,12 @@ public class HttpRequestHelper {
         addToRequestQueue(jsObjRequest);
     }
 
-    public void makeMove(String sessionToken, String gameID, CheckersMove move) {
+    public void makeMove(final String sessionToken, final String gameID, final CheckersMove move) {
         String url = Constants.SERVICES_DOMAIN + Constants.GAME_MAKE_MOVE + sessionToken
                 + "/" + gameID + "/" + (move.fromRow + 1) + "/" + (move.fromCol + 1) + "/" + (move
                 .toRow + 1) + "/" + (move.toCol + 1);
         Logger.logD(TAG, "makeMove " + url);
+
         JsonObjectRequest jsObjRequest = new JsonObjectRequest
                 (Request.Method.GET, url, "", new Response.Listener<JSONObject>() {
                     @Override
@@ -583,6 +585,8 @@ public class HttpRequestHelper {
                                     GameTableActivity.LAST_MOVE_ID = id;
                             } catch (JSONException e) {
                                 e.printStackTrace();
+                            } catch (Exception e) {
+                                e.printStackTrace();
                             }
                         }
                     }
@@ -590,7 +594,9 @@ public class HttpRequestHelper {
 
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Logger.logE(TAG, "makeMove error");
+                        error.printStackTrace();
+                        Logger.logE(TAG, "makeMove  error " + error.getMessage());
+                        makeMove(sessionToken, gameID, move);
                     }
                 });
         addToRequestQueue(jsObjRequest);
