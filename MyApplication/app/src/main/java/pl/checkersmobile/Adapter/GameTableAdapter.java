@@ -99,6 +99,10 @@ public class GameTableAdapter extends BaseAdapter {
             inImageView.setImageResource(R.drawable.piece_white);
         } else if (valueInPosition(inPosition) == CheckersData.BLACK) {
             inImageView.setImageResource(R.drawable.piece_black);
+        } else if (valueInPosition(inPosition) == CheckersData.WHITE_KING) {
+            inImageView.setImageResource(R.drawable.piece_white_king);
+        } else if (valueInPosition(inPosition) == CheckersData.BLACK_KING) {
+            inImageView.setImageResource(R.drawable.piece_black_king);
         }
 
         return inImageView;

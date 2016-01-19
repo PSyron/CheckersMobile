@@ -22,8 +22,10 @@ import pl.checkersmobile.Constants;
 import pl.checkersmobile.communication.event.AcceptInvitationEvent;
 import pl.checkersmobile.communication.event.BaseEvent;
 import pl.checkersmobile.communication.event.GetActivePlayersEvent;
+import pl.checkersmobile.communication.event.GetEnemyMovesEvent;
 import pl.checkersmobile.communication.event.GetInvitesEvent;
 import pl.checkersmobile.model.Invite;
+import pl.checkersmobile.model.Move;
 import pl.checkersmobile.model.User;
 import pl.checkersmobile.utils.Logger;
 import pl.checkersmobile.utils.PrefsHelper;
@@ -210,7 +212,7 @@ public class HttpRequestHelper {
 
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Logger.logE("checkActivePlayers", error.getMessage());
+                        Logger.logE("checkActivePlayers", "" + error.getMessage());
                     }
                 });
 
@@ -354,7 +356,7 @@ public class HttpRequestHelper {
 
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Logger.logE(TAG, "refuseInvitation success");
+                        Logger.logE(TAG, "refuseInvitation error");
                     }
                 });
         addToRequestQueue(jsObjRequest);
@@ -375,7 +377,7 @@ public class HttpRequestHelper {
 
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Logger.logE(TAG, "acceptInvitation success");
+                        Logger.logE(TAG, "acceptInvitation error");
                         EventBus.getDefault().post(new AcceptInvitationEvent(ResponseStatus.FAILURE));
                     }
                 });
@@ -400,14 +402,14 @@ public class HttpRequestHelper {
 
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Logger.logE(TAG, "createTable success");
+                        Logger.logE(TAG, "createTable error");
                     }
                 });
         addToRequestQueue(jsObjRequest);
     }
 
     public void getAcceptedInvitations(String sessionToken, String idGame) {
-        String url = Constants.SERVICES_DOMAIN + Constants.TABLE_GET_OPONENT + sessionToken
+        String url = Constants.SERVICES_DOMAIN + Constants.TABLE_GET_ENEMY + sessionToken
                 + "/" + idGame;
         Logger.logD(TAG, "getAcceptedInvitations " + url);
         JsonObjectRequest jsObjRequest = new JsonObjectRequest
@@ -421,7 +423,7 @@ public class HttpRequestHelper {
 
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Logger.logE(TAG, "getAcceptedInvitations success");
+                        Logger.logE(TAG, "getAcceptedInvitations error");
                     }
                 });
         addToRequestQueue(jsObjRequest);
@@ -441,11 +443,77 @@ public class HttpRequestHelper {
 
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Logger.logE(TAG, "sendInvitations success");
+                        Logger.logE(TAG, "sendInvitations error");
                     }
                 });
         addToRequestQueue(jsObjRequest);
     }
 
+    public void getLastMoves(String sessionToken, String gameId, String idLastMove) {
+        String url = Constants.SERVICES_DOMAIN + Constants.GAME_GET_LAST_MOVES + sessionToken
+                + "/" + gameId + "/" + idLastMove;
+        Logger.logD(TAG, "getLastMoves " + url);
+        JsonObjectRequest jsObjRequest = new JsonObjectRequest
+                (Request.Method.GET, url, "", new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            if (response.getBoolean("Successful")) {
+                                List<Move> moves = new ArrayList<>();
+                                JSONArray array = response.getJSONArray("Moves");
+                                if (array.length() > 0) {
+                                    for (int i = 0; i < array.length(); i++) {
+                                        JSONObject object = (JSONObject) array.get(i);
+                                        Move move = new Move(object.getInt("idGame"), object.getInt
+                                                ("postColumn"), object.getInt("postRow"), object.getInt("preColumn"), object.getInt
+                                                ("preRow"), object.getInt("idMove"));
+                                        moves.add(move);
+                                    }
+                                    EventBus.getDefault().post(new GetEnemyMovesEvent(ResponseStatus
+                                            .SUCCESS, moves));
+                                } else {
+                                    EventBus.getDefault().post(new GetEnemyMovesEvent(ResponseStatus
+                                            .FAILURE));
+                                }
+                            } else {
+                                EventBus.getDefault().post(new GetEnemyMovesEvent(ResponseStatus
+                                        .FAILURE));
+                            }
+                        } catch (JSONException e) {
+                            EventBus.getDefault().post(new GetEnemyMovesEvent(ResponseStatus
+                                    .FAILURE));
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Logger.logE(TAG, "getLastMoves error");
+                    }
+                });
+        addToRequestQueue(jsObjRequest);
+    }
+
+
+    public void finishMove(String sessionToken, String gameID) {
+        String url = Constants.SERVICES_DOMAIN + Constants.GAME_FINISH_MOVE + sessionToken
+                + "/" + gameID;
+        Logger.logD(TAG, "finishMove " + url);
+        JsonObjectRequest jsObjRequest = new JsonObjectRequest
+                (Request.Method.GET, url, "", new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Logger.logD(TAG, "finishMove success");
+                    }
+                }, new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Logger.logE(TAG, "finishMove error");
+                    }
+                });
+        addToRequestQueue(jsObjRequest);
+    }
     //endregion
 }
