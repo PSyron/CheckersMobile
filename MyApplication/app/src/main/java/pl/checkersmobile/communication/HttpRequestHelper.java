@@ -416,6 +416,8 @@ public class HttpRequestHelper {
                             PrefsHelper.setGameId(Integer.valueOf(response.getString("Message")) + "");
                         } catch (JSONException e) {
                             e.printStackTrace();
+                        } catch (Exception e) {
+                            e.printStackTrace();
                         }
                     }
                 }, new Response.ErrorListener() {
