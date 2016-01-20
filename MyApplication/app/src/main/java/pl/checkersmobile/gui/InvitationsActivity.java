@@ -65,10 +65,11 @@ public class InvitationsActivity extends BaseAppBarActivity implements InviteInt
     public void onEvent(GetInvitesEvent event) {
         if (event.getStatus() == ResponseStatus.SUCCESS) {
             mAdapter = new InvitationsAdapter(this, event.getInvites());
-            mInvitationList.setAdapter(mAdapter);
         } else {
-            Toast.makeText(this, R.string.error_occurred, Toast.LENGTH_SHORT).show();
+            mAdapter = new InvitationsAdapter(this, null);
+            // Toast.makeText(this, R.string.error_occurred, Toast.LENGTH_SHORT).show();
         }
+        mInvitationList.setAdapter(mAdapter);
     }
 
 

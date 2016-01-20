@@ -460,6 +460,7 @@ public class GameTableActivity extends BaseAppBarActivity {
         builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 //TODO
+                HttpRequestHelper.getInstance(GameTableActivity.this).createTable(PrefsHelper.getSessionToken());
                 doNewGame(true);
                 dialog.dismiss();
             }
@@ -505,6 +506,7 @@ public class GameTableActivity extends BaseAppBarActivity {
 
     public void onEvent(OnAcceptedInviteEvent event) {
         if (event.getStatus() == ResponseStatus.SUCCESS) {
+            Toast.makeText(this, event.getSecondPlayerName() + " zaakceptował zaproszenie", Toast.LENGTH_SHORT).show();
             onPlayerWhiteBack(event.getSecondPlayerName());
         } else {
             Toast.makeText(this, R.string.error_occurred, Toast.LENGTH_SHORT).show();

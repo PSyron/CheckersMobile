@@ -76,11 +76,11 @@ public class GameTableAdapter extends BaseAdapter {
             if (inPosition % 2 == 0) {
                 inImageView.setBackgroundColor(Color.WHITE);
             } else {
-                inImageView.setBackgroundColor(Color.DKGRAY);
+                inImageView.setBackgroundColor(Color.RED);
             }
         } else {
             if (inPosition % 2 == 0) {
-                inImageView.setBackgroundColor(Color.DKGRAY);
+                inImageView.setBackgroundColor(Color.RED);
             } else {
                 inImageView.setBackgroundColor(Color.WHITE);
             }

@@ -60,6 +60,7 @@ public class InviteToGameFragment extends Fragment implements InviteInterface {
 
     @Override
     public void onSendInvitationClicked(User user) {
+        Toast.makeText(getActivity(), "Wysłano zaproszenie do " + user.getName(), Toast.LENGTH_SHORT).show();
         HttpRequestHelper.getInstance(getActivity()).sendInvitations(PrefsHelper.getSessionToken(), user.getName(), PrefsHelper.getGameId());
     }
 
